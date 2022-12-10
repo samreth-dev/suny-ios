@@ -7,28 +7,26 @@
 
 import Foundation
 import WeatherKit
+import CoreLocation
 
 protocol WeatherViewModelProtocol {
     var publisher: Published<Weather?>.Publisher { get }
-    func fetchWeather()
+    func fetchWeather(location: CLLocation)
 }
 
 class WeatherViewModel: WeatherViewModelProtocol {
     var publisher: Published<Weather?>.Publisher { $weather }
     @Published private var weather: Weather?
     private var weatherManager: WeatherManagerProtocol
-    private var locationManager: LocationManagerProtocol
     
-    init(weather: Weather?, weatherManager: WeatherManagerProtocol, locationManager: LocationManagerProtocol) {
+    init(weather: Weather?, weatherManager: WeatherManagerProtocol) {
         self.weather = weather
         self.weatherManager = weatherManager
-        self.locationManager = locationManager
     }
     
-    func fetchWeather() {
-        locationManager.requestLocationAuth()
-        locationManager.requestCurrentLocation()
-        guard let location = locationManager.location else { return }
-        weatherManager.fetchWeather(location: location)
+    func fetchWeather(location: CLLocation) {
+        Task {
+            self.weather = await weatherManager.fetchWeather(location: location)
+        }
     }
 }
