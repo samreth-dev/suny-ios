@@ -8,39 +8,33 @@
 import Foundation
 import CoreLocation
 
+protocol LocationManagerDelegate: NSObject {
+    func didFetch(location: CLLocation)
+}
+
 protocol LocationManagerProtocol {
-    var location: CLLocation? { get set }
+    var delegate: LocationManagerDelegate? { get set }
     func requestLocationAuth()
-    func requestCurrentLocation()
 }
 
 class LocationManager: NSObject, LocationManagerProtocol {
-    var location: CLLocation?
+    weak var delegate: LocationManagerDelegate?
     private var clmanager = CLLocationManager()
     
-    override init() {
-        super.init()
-        self.clmanager.delegate = self
-    }
-    
-    init(location: CLLocation?) {
-        self.location = location
+    init(delegate: LocationManagerDelegate? = nil) {
+        self.delegate = delegate
     }
     
     func requestLocationAuth() {
-        clmanager.requestWhenInUseAuthorization()
-    }
-    
-    func requestCurrentLocation() {
-        if clmanager.authorizationStatus == .authorizedWhenInUse || clmanager.authorizationStatus == .authorizedAlways {
-            clmanager.requestLocation()
-        }
+        clmanager.delegate = self
+        clmanager.requestAlwaysAuthorization()
     }
 }
 
 extension LocationManager: CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.location = locations.first
+        guard let location = locations.first else { return }
+        delegate?.didFetch(location: location)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -48,12 +42,19 @@ extension LocationManager: CLLocationManagerDelegate{
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        if status == .authorizedAlways {
-            if CLLocationManager.isMonitoringAvailable(for: CLBeaconRegion.self) {
-                if CLLocationManager.isRangingAvailable() {
-                    debugPrint("hi")
-                }
-            }
+        switch status {
+        case .authorizedAlways:
+            clmanager.startUpdatingLocation()
+        case .authorizedWhenInUse:
+            clmanager.startUpdatingLocation()
+        case .denied:
+            debugPrint("denied")
+        case .notDetermined:
+            debugPrint("notDetermined")
+        case .restricted:
+            debugPrint("restricted")
+        default:
+            debugPrint("unknown")
         }
     }
 }
