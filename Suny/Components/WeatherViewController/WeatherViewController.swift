@@ -13,22 +13,17 @@ class WeatherViewController: UIViewController {
     private var viewModel: WeatherViewModelProtocol
     private var cancellable: Set<AnyCancellable>
     
+    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var locationButton: UIButton!
     @IBOutlet weak var windLabel: UILabel!
     @IBOutlet weak var cloudLabel: UILabel!
     @IBOutlet weak var humidityLabel: UILabel!
     @IBOutlet weak var uvLabel: UILabel!
     @IBOutlet weak var mainTemperLabel: UILabel!
-    @IBOutlet weak var bottomImageView: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupViews()
-        binding()
-        locationConfiguration()
-    }
+    @IBOutlet weak var bottomImageView: UIImageView!
     
     init(viewModel: WeatherViewModelProtocol, cancellable: Set<AnyCancellable>) {
         self.viewModel = viewModel
@@ -40,6 +35,13 @@ class WeatherViewController: UIViewController {
         fatalError()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViews()
+        binding()
+        locationConfiguration()
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
@@ -47,9 +49,14 @@ class WeatherViewController: UIViewController {
 
 private extension WeatherViewController {
     func setupViews() {
-        bottomImageView.contentMode = .scaleAspectFill
-        bottomImageView.layer.cornerRadius = 30
-        bottomImageView.image = UIImage(named: Constant.backgroundImages.randomElement() ?? "")
+        let nib = UINib(nibName: "WeatherCollectionViewCell", bundle: nil)
+        collectionView.dataSource = self
+        collectionView.register(nib
+                                , forCellWithReuseIdentifier: "WeatherCollectionViewCell")
+        collectionViewFlowLayout.itemSize = CGSize(width: 120, height: 50)
+
+        bottomImageView.image = UIImage(named: viewModel.bottomImages.randomElement() ?? "")
+        bottomImageView.layer.backgroundColor = UIColor.black.cgColor
         
         locationButton.addTarget(self, action: #selector(locationConfiguration), for: .touchUpInside)
     }
@@ -57,12 +64,14 @@ private extension WeatherViewController {
     func binding() {
         viewModel.publisher.receive(on: DispatchQueue.main).sink { weather in
             guard let weather else { return }
-            self.mainTemperLabel.text = weather.currentWeather.temperature.description
-            self.conditionLabel.text = weather.currentWeather.condition.description
-            self.windLabel.text = "Wind\n" + weather.currentWeather.wind.speed.description
-            self.uvLabel.text = "UV\n" + weather.currentWeather.uvIndex.value.description
-            self.humidityLabel.text = "Humidity\n" + (Int(weather.currentWeather.humidity*100)).description + "%"
-            self.cloudLabel.text = "Cloud\n" + (Int(weather.currentWeather.cloudCover*100)).description + "%"
+            
+            self.mainTemperLabel.text = weather.temperature
+            self.conditionLabel.text = weather.condition
+            self.windLabel.text = weather.wind
+            self.uvLabel.text = weather.uv
+            self.humidityLabel.text = weather.humidity
+            self.cloudLabel.text = weather.cloud
+            self.collectionView.reloadData()
         }.store(in: &cancellable)
     }
     
@@ -72,8 +81,24 @@ private extension WeatherViewController {
             self.viewModel.fetchWeather(location: location)
             self.cityLabel.text = city
         }
-        let destination = LocationViewController(viewModel: viewModel)
-        
+        let destination = LocationViewController(viewModel: viewModel, cancellable: [])
         present(destination, animated: true)
     }
+}
+
+extension WeatherViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        viewModel.weathers.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as! WeatherCollectionViewCell
+        
+        let weather = viewModel.weathers[indexPath.row]
+        let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.icon, temperString: weather.temperature, timeString: weather.time)
+        
+        cell.config(viewModel: viewModel)
+        return cell
+    }
+    
 }

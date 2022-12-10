@@ -10,23 +10,32 @@ import WeatherKit
 import CoreLocation
 
 protocol WeatherViewModelProtocol {
-    var publisher: Published<Weather?>.Publisher { get }
+    var publisher: Published<LocalWeather?>.Publisher { get }
+    var bottomImages: [String] { get set }
+    var weathers: [LocalWeather] { get set }
     func fetchWeather(location: CLLocation)
 }
 
 class WeatherViewModel: WeatherViewModelProtocol {
-    var publisher: Published<Weather?>.Publisher { $weather }
-    @Published private var weather: Weather?
+    var weathers: [LocalWeather]
+    var bottomImages: [String]
+    var publisher: Published<LocalWeather?>.Publisher { $weather }
+    @Published var weather: LocalWeather?
     private var weatherManager: WeatherManagerProtocol
     
-    init(weather: Weather?, weatherManager: WeatherManagerProtocol) {
+    init(weathers: [LocalWeather], bottomImages: [String], weather: LocalWeather? = nil, weatherManager: WeatherManagerProtocol) {
+        self.weathers = weathers
+        self.bottomImages = bottomImages
         self.weather = weather
         self.weatherManager = weatherManager
     }
     
     func fetchWeather(location: CLLocation) {
         Task {
-            self.weather = await weatherManager.fetchWeather(location: location)
+            if let result = await weatherManager.fetchWeather(location: location) {
+                self.weather?.mapWeather(weather: result.currentWeather)
+                self.weathers.mapWeather(weathers: result.hourlyForecast.forecast)
+            }
         }
     }
 }
