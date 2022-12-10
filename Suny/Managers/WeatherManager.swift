@@ -10,21 +10,13 @@ import WeatherKit
 import CoreLocation
 
 protocol WeatherManagerProtocol {
-    var weather: Weather? { get set }
-    func fetchWeather(location: CLLocation)
+    func fetchWeather(location: CLLocation) async -> Weather?
 }
 
 class WeatherManager: WeatherManagerProtocol {
     private let service = WeatherService.shared
-    var weather: Weather?
     
-    init(weather: Weather?) {
-        self.weather = weather
-    }
-    
-    func fetchWeather(location: CLLocation) {
-        Task {
-            try? await service.weather(for: location)
-        }
+    func fetchWeather(location: CLLocation) async -> Weather? {
+        try? await service.weather(for: location)
     }
 }
