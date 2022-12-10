@@ -13,10 +13,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
-        
-        let locationManager = LocationManager(location: nil)
-        let weatherManager = WeatherManager(weather: nil)
-        let weatherViewModel = WeatherViewModel(weather: nil, weatherManager: weatherManager, locationManager: locationManager)
+  
+        let weatherManager = WeatherManager()
+        let weatherViewModel = WeatherViewModel(weathers: [], bottomImages: Constants.bottomImages, weather: nil, weatherManager: weatherManager)
         let weatherViewController = WeatherViewController(viewModel: weatherViewModel, cancellable: [])
         let navigationController = UINavigationController(rootViewController: weatherViewController)
         

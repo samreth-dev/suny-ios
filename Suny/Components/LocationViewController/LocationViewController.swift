@@ -7,13 +7,16 @@
 
 import UIKit
 import CoreLocationUI
+import Combine
 
 class LocationViewController: UIViewController {
     private var locationButton: CLLocationButton!
     private var viewModel: LocationViewModelProtocol
+    private var cancellable: Set<AnyCancellable>
     
-    init(viewModel: LocationViewModelProtocol) {
+    init(viewModel: LocationViewModelProtocol, cancellable: Set<AnyCancellable>) {
         self.viewModel = viewModel
+        self.cancellable = cancellable
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -25,6 +28,7 @@ class LocationViewController: UIViewController {
         super.viewDidLoad()
         initViews()
         setupViews()
+        binding()
         viewModel.fetchLocation()
     }
     
@@ -37,17 +41,25 @@ class LocationViewController: UIViewController {
             locationButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30)
         ])
     }
-    
-    private func initViews() {
+}
+
+private extension LocationViewController {
+    func initViews() {
         locationButton = CLLocationButton()
         view.addSubview(locationButton)
     }
     
-    private func setupViews() {
+    func setupViews() {
         locationButton.translatesAutoresizingMaskIntoConstraints = false
         locationButton.label = .shareCurrentLocation
         locationButton.icon = .arrowFilled
         locationButton.backgroundColor = .systemYellow
         locationButton.cornerRadius = 30
+    }
+    
+    func binding() {
+        viewModel.publisher.receive(on: DispatchQueue.main).sink { location in
+            if location != nil { self.dismiss(animated: true) }
+        }.store(in: &cancellable)
     }
 }
