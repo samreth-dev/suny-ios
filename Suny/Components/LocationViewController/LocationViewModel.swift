@@ -35,8 +35,9 @@ class LocationViewModel: NSObject, LocationViewModelProtocol {
 extension LocationViewModel: LocationManagerDelegate {
     func didFetch(location: CLLocation) {
         location.fetchCityAndCountry { [weak self] city, country, error in
-            self?.locationCallBack(location, city ?? "N/A")
-            self?.location = location
+            guard let self else { return }
+            self.locationCallBack(location, city ?? "N/A")
+            self.location = location
         }
     }
 }

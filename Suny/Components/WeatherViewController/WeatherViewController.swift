@@ -20,7 +20,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var windLabel: UILabel!
     @IBOutlet weak var cloudLabel: UILabel!
     @IBOutlet weak var humidityLabel: UILabel!
-    @IBOutlet weak var uvLabel: UILabel!
+    @IBOutlet weak var dewLabel: UILabel!
     @IBOutlet weak var mainTemperLabel: UILabel!
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
@@ -42,7 +42,6 @@ class WeatherViewController: UIViewController {
         setupViews()
         binding()
         locationConfiguration()
-       
     }
 }
 
@@ -50,8 +49,7 @@ private extension WeatherViewController {
     func setupViews() {
         let nib = UINib(nibName: "WeatherCollectionViewCell", bundle: nil)
         collectionView.dataSource = self
-        collectionView.register(nib
-                                , forCellWithReuseIdentifier: "WeatherCollectionViewCell")
+        collectionView.register(nib, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
         collectionViewFlowLayout.itemSize = CGSize(width: 120, height: 50)
 
         bottomImageView.image = UIImage(named: viewModel.bottomImages.randomElement() ?? "")
@@ -62,20 +60,28 @@ private extension WeatherViewController {
     }
     
     func binding() {
-        viewModel.publisher.receive(on: DispatchQueue.main).sink { weather in
-            self.mainTemperLabel.text = weather.temperature
-            self.conditionLabel.text = weather.condition
-            self.windLabel.text = weather.wind
-            self.uvLabel.text = weather.uv
-            self.humidityLabel.text = weather.humidity
-            self.cloudLabel.text = weather.cloud
-            self.collectionView.reloadData()
+        viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] weather in
+            guard let weather else { return }
+            guard let self else { return }
+            
+            self.mainTemperLabel.text = weather.getTemp()
+            self.conditionLabel.text = weather.getCondition()
+            self.windLabel.text = weather.getWind()
+            self.dewLabel.text = weather.getDew()
+            self.humidityLabel.text = weather.getHumidity()
+            self.cloudLabel.text = weather.getCloud()
+            self.bottomImageView.image = UIImage(named: self.viewModel.bottomImages.randomElement() ?? "")
+        }.store(in: &cancellable)
+        
+        viewModel.publishers.receive(on: DispatchQueue.main).sink { [weak self] weathers in
+            if let self { self.collectionView.reloadData() }
         }.store(in: &cancellable)
     }
     
     @objc func locationConfiguration() {
         let locationManager = LocationManager()
-        let viewModel = LocationViewModel(locationManager: locationManager) { location ,city  in
+        let viewModel = LocationViewModel(locationManager: locationManager) { [weak self] location ,city  in
+            guard let self else { return }
             self.viewModel.fetchWeather(location: location)
             self.cityLabel.text = city
         }
@@ -84,12 +90,10 @@ private extension WeatherViewController {
     }
     
     @objc func search() {
-        let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: []) { location in
-            print(location)
+        let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: []) { [weak self] location in
+            guard let self else { return }
             self.viewModel.fetchWeather(location: location)
-            location.fetchCityAndCountry { city, country, error in
-                self.cityLabel.text = city
-            }
+            self.cityLabel.text = self.viewModel.fetchCity(location: location)
         }
         let destination = SearchViewController(viewModel: viewModel, cancellable: [])
         
@@ -104,12 +108,10 @@ extension WeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as! WeatherCollectionViewCell
-        if indexPath.row < viewModel.weathers.count {
-            let weather = viewModel.weathers[indexPath.row]
-            let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.icon, temperString: weather.temperature, timeString: weather.time)
-            cell.config(viewModel: viewModel)
-        }
+        let weather = viewModel.weathers[indexPath.row]
+        let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.getIcon(), temperString: weather.getTemp(), timeString: weather.getTime())
+        
+        cell.config(viewModel: viewModel)
         return cell
     }
-    
 }

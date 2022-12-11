@@ -10,16 +10,17 @@ import MapKit
 import Combine
 
 class SearchViewController: UIViewController {
+    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     private var viewModel: SearchViewModelProtocol
     private var cancellable: Set<AnyCancellable>
+    
     init(viewModel: SearchViewModelProtocol, cancellable: Set<AnyCancellable>) {
         self.viewModel = viewModel
         self.cancellable = cancellable
         super.init(nibName: nil, bundle: nil)
     }
     
-    @IBOutlet weak var searchBar: UISearchBar!
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -27,26 +28,26 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        viewModel.publisher.receive(on: DispatchQueue.main).sink { results in
-            self.tableView.reloadData()
-        }.store(in: &cancellable)
+        binding()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-    
-    func setupViews() {
-      
+    private func setupViews() {
         searchBar.delegate = self
         searchBar.becomeFirstResponder()
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    @objc func unfocusSearchBar() {
+    private func binding() {
+        viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] results in
+            self?.tableView.reloadData()
+        }.store(in: &cancellable)
+    }
+    
+    @IBAction func cancelButton(_ sender: Any) {
         searchBar.resignFirstResponder()
     }
 }
@@ -66,35 +67,19 @@ extension SearchViewController: UITableViewDataSource {
     }
 }
 
+extension SearchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let result = viewModel.results[indexPath.row]
+        viewModel.search(locationString: result.city + ", " + result.country)
+        self.dismiss(animated: true)
+    }
+}
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //change searchCompleter depends on searchBar's text
         if !searchText.isEmpty {
             viewModel.setup()
             viewModel.completer.queryFragment = searchText
         }
-    }
-}
-
-extension SearchViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let geocoder = CLGeocoder()
-        let result = viewModel.results[indexPath.row]
-        print(result)
-        
-        geocoder.geocodeAddressString(result.city + ", " + result.country, completionHandler: {(placemarks, error) -> Void in
-           if((error) != nil){
-              print("Error", error)
-           }
-           if let placemark = placemarks?.first {
-               if let location = placemark.location {
-                   
-                   self.viewModel.locationCallBack(location)
-               }
-               
-              }
-            })
-        self.dismiss(animated: true)
     }
 }

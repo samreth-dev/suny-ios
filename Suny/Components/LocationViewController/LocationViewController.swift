@@ -10,6 +10,7 @@ import CoreLocationUI
 import Combine
 
 class LocationViewController: UIViewController {
+    @IBOutlet weak var requestLabel: UILabel!
     private var locationButton: CLLocationButton!
     private var viewModel: LocationViewModelProtocol
     private var cancellable: Set<AnyCancellable>
@@ -38,7 +39,8 @@ class LocationViewController: UIViewController {
             locationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             locationButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             locationButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30),
-            locationButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30)
+            locationButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30),
+            requestLabel.bottomAnchor.constraint(equalTo: locationButton.topAnchor, constant: 30)
         ])
     }
 }
@@ -53,13 +55,13 @@ private extension LocationViewController {
         locationButton.translatesAutoresizingMaskIntoConstraints = false
         locationButton.label = .shareCurrentLocation
         locationButton.icon = .arrowFilled
-        locationButton.backgroundColor = .systemYellow
+        locationButton.backgroundColor = .systemMint
         locationButton.cornerRadius = 30
     }
     
     func binding() {
-        viewModel.publisher.receive(on: DispatchQueue.main).sink { location in
-            if location != nil { self.dismiss(animated: true) }
+        viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] location in
+            if location != nil { self?.dismiss(animated: true) }
         }.store(in: &cancellable)
     }
 }

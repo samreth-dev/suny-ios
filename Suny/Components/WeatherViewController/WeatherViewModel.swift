@@ -10,20 +10,23 @@ import WeatherKit
 import CoreLocation
 
 protocol WeatherViewModelProtocol {
-    var publisher: Published<LocalWeather>.Publisher { get }
+    var publisher: Published<CurrentWeather?>.Publisher { get }
+    var publishers: Published<[HourWeather]>.Publisher { get }
     var bottomImages: [String] { get set }
-    var weathers: [LocalWeather] { get set }
+    var weathers: [HourWeather] { get set }
     func fetchWeather(location: CLLocation)
+    func fetchCity(location: CLLocation) -> String
 }
 
 class WeatherViewModel: WeatherViewModelProtocol {
-    var weathers: [LocalWeather]
+    var publishers: Published<[HourWeather]>.Publisher { $weathers}
+    var publisher: Published<CurrentWeather?>.Publisher { $weather }
+    @Published var weathers: [HourWeather]
+    @Published var weather: CurrentWeather?
     var bottomImages: [String]
-    var publisher: Published<LocalWeather>.Publisher { $weather }
-    @Published var weather: LocalWeather
     private var weatherManager: WeatherManagerProtocol
     
-    init(weathers: [LocalWeather], bottomImages: [String], weather: LocalWeather, weatherManager: WeatherManagerProtocol) {
+    init(weathers: [HourWeather], bottomImages: [String], weather: CurrentWeather?, weatherManager: WeatherManagerProtocol) {
         self.weathers = weathers
         self.bottomImages = bottomImages
         self.weather = weather
@@ -31,12 +34,21 @@ class WeatherViewModel: WeatherViewModelProtocol {
     }
     
     func fetchWeather(location: CLLocation) {
-        Task {
+        Task { [weak self] in
+            guard let self else { return }
             if let result = await weatherManager.fetchWeather(location: location) {
-                self.weather.mapWeather(weather: result.currentWeather)
-                self.weathers.mapWeathers(weathers: result.todayHourWeathers.nextHourWeathers)
+                self.weather = result.currentWeather
+                self.weathers = result.todayHourWeathers.nextHourWeathers
             }
         }
+    }
+    
+    func fetchCity(location: CLLocation) -> String {
+        var cityResult = ""
+        location.fetchCityAndCountry { city, country, error in
+            cityResult = city ?? "N/A"
+        }
+        return cityResult
     }
 }
 

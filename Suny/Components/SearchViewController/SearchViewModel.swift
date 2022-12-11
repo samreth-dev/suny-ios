@@ -13,15 +13,15 @@ protocol SearchViewModelProtocol {
     var completer: MKLocalSearchCompleter { get set }
     var results: [(city: String, country: String)] { get set }
     var locationCallBack: (CLLocation) -> () { get set }
-    func search()
+    func search(locationString: String)
     func setup()
 }
 
 class SearchViewModel: NSObject, SearchViewModelProtocol {
     var publisher: Published<[(city: String, country: String)]>.Publisher { $results }
     var completer: MKLocalSearchCompleter
-    @Published var results: [(city: String, country: String)]
     var locationCallBack: (CLLocation) -> ()
+    @Published var results: [(city: String, country: String)]
     
     init(completer: MKLocalSearchCompleter, results: [(city: String, country: String)], locationCallBack: @escaping (CLLocation) -> Void) {
         self.completer = completer
@@ -34,42 +34,39 @@ class SearchViewModel: NSObject, SearchViewModelProtocol {
         completer.region = MKCoordinateRegion(.world)
         completer.resultTypes = MKLocalSearchCompleter.ResultType([.address])
     }
-    func search() {
-        
+    
+    func search(locationString: String) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(locationString) { [weak self] placemarks, error in
+            if let error {
+                debugPrint(error.localizedDescription)
+            }
+            if let location = placemarks?.first?.location {
+                self?.locationCallBack(location)
+            }
+        }
     }
 }
 
 extension SearchViewModel: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        
         results = self.getCityList(results: completer.results)
-        
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         print(error.localizedDescription)
     }
+    
     func getCityList(results: [MKLocalSearchCompletion]) -> [(city: String, country: String)]{
         
         var searchResults: [(city: String, country: String)] = []
         
         for result in results {
-            
             let titleComponents = result.title.components(separatedBy: ", ")
             let subtitleComponents = result.subtitle.components(separatedBy: ", ")
             
-            buildCityTypeA(titleComponents, subtitleComponents){place in
-                
+            buildPlace(titleComponents, subtitleComponents){ place in
                 if place.city != "" && place.country != ""{
-                    
-                    searchResults.append(place)
-                }
-            }
-            
-            buildCityTypeB(titleComponents, subtitleComponents){place in
-                
-                if place.city != "" && place.country != ""{
-                    
                     searchResults.append(place)
                 }
             }
@@ -77,7 +74,8 @@ extension SearchViewModel: MKLocalSearchCompleterDelegate {
         
         return searchResults
     }
-    func buildCityTypeA(_ title: [String],_ subtitle: [String], _ completion: @escaping ((city: String, country: String)) -> Void){
+    
+    func buildPlace(_ title: [String],_ subtitle: [String], _ completion: @escaping ((city: String, country: String)) -> Void){
         
         var city: String = ""
         var country: String = ""
@@ -87,20 +85,6 @@ extension SearchViewModel: MKLocalSearchCompleterDelegate {
             country = subtitle.count == 1 && subtitle[0] != "" ? subtitle.first! : title.last!
         }
       
-        completion((city, country))
-    }
-
-    func buildCityTypeB(_ title: [String],_ subtitle: [String], _ completion: @escaping ((city: String, country: String)) -> Void){
-        
-        var city: String = ""
-        var country: String = ""
-        
-        if title.count >= 1 && subtitle.count == 1 {
-            
-            city = title.first!
-            country = subtitle.last!
-        }
-        
         completion((city, country))
     }
 }

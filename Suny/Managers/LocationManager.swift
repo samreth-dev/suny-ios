@@ -8,13 +8,14 @@
 import Foundation
 import CoreLocation
 
-protocol LocationManagerDelegate: NSObject {
-    func didFetch(location: CLLocation)
-}
 
 protocol LocationManagerProtocol {
     var delegate: LocationManagerDelegate? { get set }
     func requestLocationAuth()
+}
+
+protocol LocationManagerDelegate: NSObject {
+    func didFetch(location: CLLocation)
 }
 
 class LocationManager: NSObject, LocationManagerProtocol {
@@ -34,8 +35,10 @@ class LocationManager: NSObject, LocationManagerProtocol {
 extension LocationManager: CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.first else { return }
-        delegate?.didFetch(location: location)
-        clmanager.stopUpdatingLocation()
+        if let delegate {
+            delegate.didFetch(location: location)
+            clmanager.stopUpdatingLocation()
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

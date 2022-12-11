@@ -23,6 +23,17 @@
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="S3d-dz-mWN">
                     <rect key="frame" x="0.0" y="115" width="393" height="703"/>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <button key="tableHeaderView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="ey7-Tu-Hpc">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" systemColor="systemYellowColor"/>
+                        <color key="tintColor" systemColor="labelColor"/>
+                        <state key="normal" title="Button"/>
+                        <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
+                        <connections>
+                            <action selector="cancelButton:" destination="-1" eventType="touchUpInside" id="o7F-2y-77u"/>
+                        </connections>
+                    </button>
                 </tableView>
                 <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="9mh-Cf-Cd7">
                     <rect key="frame" x="0.0" y="59" width="393" height="56"/>
@@ -44,10 +55,13 @@
                 <constraint firstItem="9mh-Cf-Cd7" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="tQU-yw-fG7"/>
                 <constraint firstAttribute="trailing" secondItem="9mh-Cf-Cd7" secondAttribute="trailing" id="taH-op-mBk"/>
             </constraints>
-            <point key="canvasLocation" x="-76" y="-12"/>
+            <point key="canvasLocation" x="-77.099236641221367" y="-12.67605633802817"/>
         </view>
     </objects>
     <resources>
+        <systemColor name="labelColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
