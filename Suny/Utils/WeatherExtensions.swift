@@ -64,6 +64,29 @@ extension CurrentWeather {
     }
 }
 
+extension Weather: CustomWeather {
+    var weather: Weather {
+        get {
+            return self
+        }
+        set {
+            self = newValue
+        }
+    }
+    
+    func getIcon() -> String {
+        self.currentWeather.symbolName
+    }
+    
+    func getTime() -> String {
+        self.currentWeather.date.formatted(date: .omitted, time: .shortened).replacing(":00", with: "")
+    }
+    
+    func getTemp() -> String {
+        self.currentWeather.temperature.description
+    }
+}
+
 extension DayWeather: CustomWeather {
     var weather: DayWeather {
         get {
@@ -100,13 +123,16 @@ extension HourWeather: CustomWeather {
     }
     
     func getTime() -> String {
-        self.date.formatted(date: .omitted, time: .shortened).replacing(":00", with: "")
+        let date = self.date.formatted(date: .numeric, time: .omitted).dropLast(5)
+        let time = self.date.formatted(date: .omitted, time: .shortened).replacing(":00", with: "")
+        return time + " " + date
     }
     
     func getTemp() -> String {
         self.temperature.description
     }
 }
+
 extension MinuteWeather: CustomWeather {
     var weather: MinuteWeather {
         get {
@@ -121,10 +147,10 @@ extension MinuteWeather: CustomWeather {
     }
     
     func getTime() -> String {
-        self.date.formatted(date: .omitted, time: .shortened).replacing(":00", with: "")
+        self.date.formatted(date: .omitted, time: .shortened)
     }
     
     func getTemp() -> String {
-        self.precipitation.description
+        self.precipitationIntensity.description
     }
 }
