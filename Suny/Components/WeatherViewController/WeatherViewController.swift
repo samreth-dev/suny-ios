@@ -14,6 +14,8 @@ class WeatherViewController: UIViewController {
     private var viewModel: WeatherViewModelProtocol
     private var cancellable: Set<AnyCancellable>
     
+    private var loadingBackground: UIView!
+    private var loadingLabel: UILabel!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var locationButton: UIButton!
@@ -42,12 +44,21 @@ class WeatherViewController: UIViewController {
         setupViews()
         binding()
         locationConfiguration()
+        loadingView(status: "Getting Current Location...", loadingTextColor: .white, loadingColor: .systemMint)
     }
 }
 
 //MARK: private views configurations
 private extension WeatherViewController {
     func setupViews() {
+        loadingLabel = UILabel()
+        loadingLabel.frame = CGRect(x: 0, y: view.bounds.midY - 20, width: Constants.screenWidth, height: 40)
+        loadingLabel.textAlignment = .center
+        
+        loadingBackground = UIView()
+        loadingBackground.backgroundColor = .black
+        loadingBackground.frame = Constants.screenFrame
+        
         let nib = UINib(nibName: "WeatherCollectionViewCell", bundle: nil)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -80,12 +91,37 @@ private extension WeatherViewController {
         }.store(in: &cancellable)
     }
     
+    func loadingView(status: String, loadingTextColor: UIColor, loadingColor: UIColor) {
+        loadingBackground.alpha = 0.5
+        
+        loadingLabel.text = status
+        loadingLabel.textColor = loadingTextColor
+        loadingLabel.layer.backgroundColor = loadingColor.cgColor
+        loadingLabel.alpha = 1
+        
+        view.addSubview(loadingBackground)
+        view.addSubview(loadingLabel)
+        view.addSubview(locationButton)
+    }
+    
     @objc func locationConfiguration() {
+        loadingView(status: "Getting Current Location...", loadingTextColor: .white, loadingColor: .systemMint)
+        
         let locationManager = LocationManager()
         let viewModel = LocationViewModel(locationManager: locationManager) { [weak self] location ,city  in
             guard let self else { return }
             self.viewModel.fetchWeather(location: location)
             self.cityLabel.text = city
+            self.searchButton.isUserInteractionEnabled = true
+            self.searchButton.alpha = 1
+          
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                guard let self else { return }
+                UIView.animate(withDuration: 0.25) {
+                    self.loadingLabel.alpha = 0
+                    self.loadingBackground.alpha = 0
+                }
+            }
         }
         let destination = LocationViewController(viewModel: viewModel, cancellable: [])
         
@@ -95,9 +131,19 @@ private extension WeatherViewController {
     @objc func search() {
         let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: []) { [weak self] location in
             guard let self else { return }
+            self.loadingView(status: "Searching Location...", loadingTextColor: .black, loadingColor: .systemYellow)
+            
             self.viewModel.fetchWeather(location: location)
             self.viewModel.fetchCity(location: location) { city in
                 self.cityLabel.text = city
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+                guard let self else { return }
+                UIView.animate(withDuration: 0.25) {
+                    self.loadingLabel.alpha = 0
+                    self.loadingBackground.alpha = 0
+                }
             }
         }
         let destination = SearchViewController(viewModel: viewModel, cancellable: [])
@@ -119,7 +165,7 @@ extension WeatherViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as! WeatherCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell else { return UICollectionViewCell() }
         let weather = viewModel.weathers[indexPath.row]
         let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.getIcon(), temperString: weather.getTemp(), timeString: weather.getTime())
 

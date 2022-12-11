@@ -126,10 +126,10 @@
 		5314972429441014002FEA2D /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				5365F36729459A1800CBE895 /* WeathersForecastViewController */,
-				5394B4602945398800833FF8 /* SearchViewController */,
-				5314973429443687002FEA2D /* LocationViewController */,
 				5314972629441027002FEA2D /* WeatherViewController */,
+				5314973429443687002FEA2D /* LocationViewController */,
+				5394B4602945398800833FF8 /* SearchViewController */,
+				5365F36729459A1800CBE895 /* WeathersForecastViewController */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -493,6 +493,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allows using location to continue.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = light;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -523,6 +524,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allows using location to continue.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = light;
 				LD_RUNPATH_SEARCH_PATHS = (
