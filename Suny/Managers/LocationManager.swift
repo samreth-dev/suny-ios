@@ -8,7 +8,6 @@
 import Foundation
 import CoreLocation
 
-
 protocol LocationManagerProtocol {
     var delegate: LocationManagerDelegate? { get set }
     func requestLocationAuth()

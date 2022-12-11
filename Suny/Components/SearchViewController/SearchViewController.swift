@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import MapKit
 import Combine
 
 class SearchViewController: UIViewController {
