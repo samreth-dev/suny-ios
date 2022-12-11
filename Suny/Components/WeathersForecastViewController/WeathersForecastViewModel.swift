@@ -15,7 +15,7 @@ enum Section: String, CaseIterable {
 }
 
 protocol WeathersForecastViewModelProtocol {
-    func getWeathers(index: Int) -> [any CustomWeather]
+    func getWeathers(index: Int) -> [any AnyWeather]
     var sections: [Section] { get set }
     var cityString: String? { get set }
     var tempString: String? { get set }
@@ -37,16 +37,13 @@ class WeathersForecastViewModel: WeathersForecastViewModelProtocol {
         self.weather = weather
     }
     
-    func getWeathers(index: Int) -> [any CustomWeather] {
+    func getWeathers(index: Int) -> [any AnyWeather] {
         switch index {
         case 0:
-            print("this1")
             return getDayWeathers()
         case 1:
-            print("this2")
             return getHourWeathers()
         case 2:
-            print("this3")
             return getMinuteWeathers()
         default:
             return []

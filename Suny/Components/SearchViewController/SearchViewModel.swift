@@ -11,10 +11,11 @@ import MapKit
 protocol SearchViewModelProtocol {
     var publisher: Published<[(city: String, country: String)]>.Publisher { get }
     var completer: MKLocalSearchCompleter { get set }
-    var results: [(city: String, country: String)] { get set }
     var locationCallBack: (CLLocation) -> () { get set }
-    func search(locationString: String)
+    var results: [(city: String, country: String)] { get set }
+    func search(index: Int)
     func setup()
+    func getLocationString(index: Int) -> String
 }
 
 class SearchViewModel: NSObject, SearchViewModelProtocol {
@@ -35,7 +36,10 @@ class SearchViewModel: NSObject, SearchViewModelProtocol {
         completer.resultTypes = MKLocalSearchCompleter.ResultType([.address])
     }
     
-    func search(locationString: String) {
+    func search(index: Int) {
+        let city = results[index].city
+        let country = results[index].country
+        let locationString = city + ", " + country
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(locationString) { [weak self] placemarks, error in
             if let error {
@@ -46,6 +50,12 @@ class SearchViewModel: NSObject, SearchViewModelProtocol {
             }
         }
     }
+    
+    func getLocationString(index: Int) -> String {
+        let city = results[index].city
+        let country = results[index].country
+        return city + ", " + country
+    }
 }
 
 extension SearchViewModel: MKLocalSearchCompleterDelegate {
@@ -54,7 +64,7 @@ extension SearchViewModel: MKLocalSearchCompleterDelegate {
     }
 
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        print(error.localizedDescription)
+        debugPrint(error.localizedDescription)
     }
     
     func getCityList(results: [MKLocalSearchCompletion]) -> [(city: String, country: String)]{

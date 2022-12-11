@@ -8,7 +8,7 @@
 import WeatherKit
 import Foundation
 
-protocol CustomWeather {
+protocol AnyWeather {
     associatedtype T
     var weather: T { get set }
     func getIcon() -> String
@@ -64,7 +64,7 @@ extension CurrentWeather {
     }
 }
 
-extension Weather: CustomWeather {
+extension Weather: AnyWeather {
     var weather: Weather {
         get {
             return self
@@ -87,7 +87,7 @@ extension Weather: CustomWeather {
     }
 }
 
-extension DayWeather: CustomWeather {
+extension DayWeather: AnyWeather {
     var weather: DayWeather {
         get {
             return self
@@ -109,7 +109,7 @@ extension DayWeather: CustomWeather {
     }
 }
 
-extension HourWeather: CustomWeather {
+extension HourWeather: AnyWeather {
     var weather: HourWeather {
         get {
             return self
@@ -133,7 +133,7 @@ extension HourWeather: CustomWeather {
     }
 }
 
-extension MinuteWeather: CustomWeather {
+extension MinuteWeather: AnyWeather {
     var weather: MinuteWeather {
         get {
             return self

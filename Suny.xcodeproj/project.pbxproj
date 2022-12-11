@@ -21,6 +21,14 @@
 		5314973A29443748002FEA2D /* LocationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5314973929443748002FEA2D /* LocationViewModel.swift */; };
 		5314973E29444CCF002FEA2D /* CLLocationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5314973D29444CCF002FEA2D /* CLLocationExtensions.swift */; };
 		531497412944575A002FEA2D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531497402944575A002FEA2D /* Constants.swift */; };
+		5365F36A29459A3800CBE895 /* WeathersForecastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5365F36829459A3800CBE895 /* WeathersForecastViewController.swift */; };
+		5365F36B29459A3800CBE895 /* WeathersForecastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5365F36929459A3800CBE895 /* WeathersForecastViewController.xib */; };
+		5365F36D29459A3F00CBE895 /* WeathersForecastViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5365F36C29459A3F00CBE895 /* WeathersForecastViewModel.swift */; };
+		5365F3712945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5365F36F2945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.swift */; };
+		5365F3722945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5365F3702945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.xib */; };
+		5365F3742945A3F200CBE895 /* WeathersForecastCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5365F3732945A3F200CBE895 /* WeathersForecastCellViewModel.swift */; };
+		537683BA2946364E00613EAC /* WeathersForecastHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537683B92946364E00613EAC /* WeathersForecastHeader.swift */; };
+		537683BD2946432500613EAC /* WeathersForecastHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537683BC2946432500613EAC /* WeathersForecastHeaderViewModel.swift */; };
 		5394B45829452F7600833FF8 /* WeatherCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5394B45729452F7600833FF8 /* WeatherCollectionViewCellViewModel.swift */; };
 		5394B45A29452F9D00833FF8 /* WeatherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5394B45929452F9D00833FF8 /* WeatherExtensions.swift */; };
 		5394B4632945399B00833FF8 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5394B4612945399B00833FF8 /* SearchViewController.swift */; };
@@ -48,6 +56,14 @@
 		5314973929443748002FEA2D /* LocationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationViewModel.swift; sourceTree = "<group>"; };
 		5314973D29444CCF002FEA2D /* CLLocationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CLLocationExtensions.swift; sourceTree = "<group>"; };
 		531497402944575A002FEA2D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5365F36829459A3800CBE895 /* WeathersForecastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastViewController.swift; sourceTree = "<group>"; };
+		5365F36929459A3800CBE895 /* WeathersForecastViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeathersForecastViewController.xib; sourceTree = "<group>"; };
+		5365F36C29459A3F00CBE895 /* WeathersForecastViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastViewModel.swift; sourceTree = "<group>"; };
+		5365F36F2945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastCollectionViewTableViewCell.swift; sourceTree = "<group>"; };
+		5365F3702945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeathersForecastCollectionViewTableViewCell.xib; sourceTree = "<group>"; };
+		5365F3732945A3F200CBE895 /* WeathersForecastCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastCellViewModel.swift; sourceTree = "<group>"; };
+		537683B92946364E00613EAC /* WeathersForecastHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastHeader.swift; sourceTree = "<group>"; };
+		537683BC2946432500613EAC /* WeathersForecastHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastHeaderViewModel.swift; sourceTree = "<group>"; };
 		5394B45729452F7600833FF8 /* WeatherCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		5394B45929452F9D00833FF8 /* WeatherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherExtensions.swift; sourceTree = "<group>"; };
 		5394B4612945399B00833FF8 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -110,6 +126,7 @@
 		5314972429441014002FEA2D /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				5365F36729459A1800CBE895 /* WeathersForecastViewController */,
 				5394B4602945398800833FF8 /* SearchViewController */,
 				5314973429443687002FEA2D /* LocationViewController */,
 				5314972629441027002FEA2D /* WeatherViewController */,
@@ -172,6 +189,37 @@
 				531497402944575A002FEA2D /* Constants.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		5365F36729459A1800CBE895 /* WeathersForecastViewController */ = {
+			isa = PBXGroup;
+			children = (
+				537683BB2946431900613EAC /* WeathersForecastHeader */,
+				5365F36E2945A33300CBE895 /* WeathersForecastCollectionViewTableCell */,
+				5365F36829459A3800CBE895 /* WeathersForecastViewController.swift */,
+				5365F36929459A3800CBE895 /* WeathersForecastViewController.xib */,
+				5365F36C29459A3F00CBE895 /* WeathersForecastViewModel.swift */,
+			);
+			path = WeathersForecastViewController;
+			sourceTree = "<group>";
+		};
+		5365F36E2945A33300CBE895 /* WeathersForecastCollectionViewTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				5365F36F2945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.swift */,
+				5365F3702945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.xib */,
+				5365F3732945A3F200CBE895 /* WeathersForecastCellViewModel.swift */,
+			);
+			path = WeathersForecastCollectionViewTableCell;
+			sourceTree = "<group>";
+		};
+		537683BB2946431900613EAC /* WeathersForecastHeader */ = {
+			isa = PBXGroup;
+			children = (
+				537683B92946364E00613EAC /* WeathersForecastHeader.swift */,
+				537683BC2946432500613EAC /* WeathersForecastHeaderViewModel.swift */,
+			);
+			path = WeathersForecastHeader;
 			sourceTree = "<group>";
 		};
 		5394B45F2945394100833FF8 /* SDKs */ = {
@@ -263,6 +311,8 @@
 				5314971C29440FEB002FEA2D /* LaunchScreen.storyboard in Resources */,
 				5314973329443450002FEA2D /* WeatherViewController.xib in Resources */,
 				5394B4642945399B00833FF8 /* SearchViewController.xib in Resources */,
+				5365F36B29459A3800CBE895 /* WeathersForecastViewController.xib in Resources */,
+				5365F3722945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.xib in Resources */,
 				53CCDF6C2944FEA8006D72F5 /* WeatherCollectionViewCell.xib in Resources */,
 				5314971929440FEB002FEA2D /* Assets.xcassets in Resources */,
 				53149738294436F9002FEA2D /* LocationViewController.xib in Resources */,
@@ -284,13 +334,19 @@
 				5314972F29441B4A002FEA2D /* LocationManager.swift in Sources */,
 				5314972C29441A7F002FEA2D /* WeatherManager.swift in Sources */,
 				5314973229443450002FEA2D /* WeatherViewController.swift in Sources */,
+				5365F36A29459A3800CBE895 /* WeathersForecastViewController.swift in Sources */,
 				5394B4632945399B00833FF8 /* SearchViewController.swift in Sources */,
 				5314971029440FEA002FEA2D /* AppDelegate.swift in Sources */,
 				5314971229440FEA002FEA2D /* SceneDelegate.swift in Sources */,
 				5314973E29444CCF002FEA2D /* CLLocationExtensions.swift in Sources */,
+				5365F3742945A3F200CBE895 /* WeathersForecastCellViewModel.swift in Sources */,
 				5394B466294539A100833FF8 /* SearchViewModel.swift in Sources */,
+				5365F3712945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.swift in Sources */,
+				5365F36D29459A3F00CBE895 /* WeathersForecastViewModel.swift in Sources */,
 				5394B45829452F7600833FF8 /* WeatherCollectionViewCellViewModel.swift in Sources */,
+				537683BA2946364E00613EAC /* WeathersForecastHeader.swift in Sources */,
 				5314973A29443748002FEA2D /* LocationViewModel.swift in Sources */,
+				537683BD2946432500613EAC /* WeathersForecastHeaderViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,8 +493,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allows using location to continue.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -468,8 +523,7 @@
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Please allows using location to continue.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

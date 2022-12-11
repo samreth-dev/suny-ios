@@ -45,12 +45,14 @@ class WeatherViewController: UIViewController {
     }
 }
 
+//MARK: private views configurations
 private extension WeatherViewController {
     func setupViews() {
         let nib = UINib(nibName: "WeatherCollectionViewCell", bundle: nil)
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(nib, forCellWithReuseIdentifier: "WeatherCollectionViewCell")
-        collectionViewFlowLayout.itemSize = CGSize(width: 120, height: 50)
+        collectionViewFlowLayout.itemSize = CGSize(width: 110, height: 50)
 
         bottomImageView.image = UIImage(named: viewModel.bottomImages.randomElement() ?? "")
         bottomImageView.layer.backgroundColor = UIColor.black.cgColor
@@ -86,6 +88,7 @@ private extension WeatherViewController {
             self.cityLabel.text = city
         }
         let destination = LocationViewController(viewModel: viewModel, cancellable: [])
+        
         present(destination, animated: true)
     }
     
@@ -93,7 +96,9 @@ private extension WeatherViewController {
         let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: []) { [weak self] location in
             guard let self else { return }
             self.viewModel.fetchWeather(location: location)
-            self.cityLabel.text = self.viewModel.fetchCity(location: location)
+            self.viewModel.fetchCity(location: location) { city in
+                self.cityLabel.text = city
+            }
         }
         let destination = SearchViewController(viewModel: viewModel, cancellable: [])
         
@@ -101,17 +106,37 @@ private extension WeatherViewController {
     }
 }
 
+//MARK: datasource & delegate
 extension WeatherViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.weathers.count
+        if viewModel.weathers.count == 0 {
+            collectionView.backgroundColor = .clear
+            return 0
+        } else {
+            collectionView.backgroundColor = .black
+            return viewModel.weathers.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as! WeatherCollectionViewCell
         let weather = viewModel.weathers[indexPath.row]
         let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.getIcon(), temperString: weather.getTemp(), timeString: weather.getTime())
-        
+
         cell.config(viewModel: viewModel)
         return cell
+    }
+}
+
+extension WeatherViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let sections = Section.allCases
+        let cityString = cityLabel.text
+        let tempString = viewModel.mainWeather?.getTemp()
+        let iconString = viewModel.mainWeather?.getIcon()
+        let weather = viewModel.mainWeather
+        let viewModel = WeathersForecastViewModel(sections: sections, cityString: cityString, tempString: tempString, iconString: iconString, weather: weather)
+        
+        present(WeathersForecastViewController(viewModel: viewModel), animated: true)
     }
 }

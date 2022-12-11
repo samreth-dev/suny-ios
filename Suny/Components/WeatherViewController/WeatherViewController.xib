@@ -34,7 +34,7 @@
                     <rect key="frame" x="0.0" y="497" width="393" height="355"/>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </imageView>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="248" text="0 °C" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mmS-9M-MgE">
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="248" text="3 °C" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mmS-9M-MgE">
                     <rect key="frame" x="30" y="151.33333333333334" width="333" height="65.666666666666657"/>
                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="55"/>
                     <color key="textColor" systemColor="systemMintColor"/>

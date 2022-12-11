@@ -30,18 +30,20 @@ class SearchViewController: UIViewController {
         setupViews()
         binding()
     }
-    
-    private func setupViews() {
+}
+
+//MARK: private views configurations
+private extension SearchViewController {
+    func setupViews() {
         searchBar.delegate = self
         searchBar.becomeFirstResponder()
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func binding() {
+    func binding() {
         viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] results in
             self?.tableView.reloadData()
         }.store(in: &cancellable)
@@ -52,6 +54,7 @@ class SearchViewController: UIViewController {
     }
 }
 
+//MARK: datasource & delegate
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.results.count
@@ -59,18 +62,18 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        let result = viewModel.results[indexPath.row]
-        cell.textLabel?.text = result.city + ", " + result.country
+        
+        cell.textLabel?.text = viewModel.getLocationString(index: indexPath.row)
         cell.backgroundColor = .darkGray
         cell.textLabel?.textColor = .white
+        
         return cell
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let result = viewModel.results[indexPath.row]
-        viewModel.search(locationString: result.city + ", " + result.country)
+        viewModel.search(index: indexPath.row)
         self.dismiss(animated: true)
     }
 }

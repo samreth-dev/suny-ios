@@ -45,6 +45,7 @@ class LocationViewController: UIViewController {
     }
 }
 
+//MARK: private views configurations
 private extension LocationViewController {
     func initViews() {
         locationButton = CLLocationButton()

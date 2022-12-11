@@ -10,16 +10,15 @@ import UIKit
 
 
 class WeathersForecastViewController: UIViewController {
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var layout: UICollectionViewFlowLayout!
     private var viewModel: any WeathersForecastViewModelProtocol
-
 
     init(viewModel: any WeathersForecastViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var layout: UICollectionViewFlowLayout!
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -43,7 +42,8 @@ class WeathersForecastViewController: UIViewController {
     }
 }
 
-extension WeathersForecastViewController:UITableViewDataSource, UITableViewDelegate {
+//MARK: datasource & delegate
+extension WeathersForecastViewController:UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         1
     }
@@ -57,16 +57,20 @@ extension WeathersForecastViewController:UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WeathersForecastCollectionViewTableViewCell", for: indexPath) as! WeathersForecastCollectionViewTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "WeathersForecastCollectionViewTableViewCell", for: indexPath) as? WeathersForecastCollectionViewTableViewCell else { return UITableViewCell() }
+        
         let weathers = self.viewModel.getWeathers(index: indexPath.section)
         let viewModel = WeathersForecastCellViewModel(weathers: weathers)
         cell.config(viewModel: viewModel)
+        
         return cell
     }
-    
+}
+
+extension WeathersForecastViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let headerView = view as? UITableViewHeaderFooterView {
-               headerView.textLabel?.textColor = .white
+            headerView.textLabel?.textColor = .white
         }
     }
     

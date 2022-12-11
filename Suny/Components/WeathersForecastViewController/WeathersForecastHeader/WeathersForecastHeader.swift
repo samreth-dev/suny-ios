@@ -8,7 +8,6 @@
 import UIKit
 
 class WeathersForecastHeader: UIView {
-    
     private var cityLabel: UILabel!
     private var imageView: UIImageView!
     private var temperLabel: UILabel!
@@ -42,6 +41,7 @@ class WeathersForecastHeader: UIView {
     }
 }
 
+//MARK: private views configurations
 private extension WeathersForecastHeader {
     func initViews() {
         stackView = UIStackView()
@@ -55,7 +55,6 @@ private extension WeathersForecastHeader {
     }
     
     func setupViews() {
-        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.addArrangedSubview(temperLabel)
