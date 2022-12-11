@@ -8,6 +8,14 @@
 import WeatherKit
 import Foundation
 
+protocol CustomWeather {
+    associatedtype T
+    var weather: T { get set }
+    func getIcon() -> String
+    func getTime() -> String
+    func getTemp() -> String
+}
+
 extension Weather {
     var todayHourWeathers: [HourWeather] {
         get {
@@ -56,7 +64,37 @@ extension CurrentWeather {
     }
 }
 
-extension HourWeather {
+extension DayWeather: CustomWeather {
+    var weather: DayWeather {
+        get {
+            return self
+        }
+        set {
+            self = newValue
+        }
+    }
+    func getIcon() -> String {
+        self.symbolName
+    }
+    
+    func getTime() -> String {
+        String(self.date.formatted(date: .abbreviated, time: .omitted).dropLast(6))
+    }
+    
+    func getTemp() -> String {
+        self.highTemperature.description
+    }
+}
+
+extension HourWeather: CustomWeather {
+    var weather: HourWeather {
+        get {
+            return self
+        }
+        set {
+            self = newValue
+        }
+    }
     func getIcon() -> String {
         self.symbolName
     }
@@ -69,4 +107,24 @@ extension HourWeather {
         self.temperature.description
     }
 }
-
+extension MinuteWeather: CustomWeather {
+    var weather: MinuteWeather {
+        get {
+            return self
+        }
+        set {
+            self = newValue
+        }
+    }
+    func getIcon() -> String {
+        "sun.min"
+    }
+    
+    func getTime() -> String {
+        self.date.formatted(date: .omitted, time: .shortened).replacing(":00", with: "")
+    }
+    
+    func getTemp() -> String {
+        self.precipitation.description
+    }
+}
