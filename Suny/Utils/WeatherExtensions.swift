@@ -26,81 +26,47 @@ extension Array<HourWeather> {
     }
 }
 
-extension WeatherCondition {
-    var presentableImageString: String {
-        get {
-            switch self {
-            case .blizzard:
-                return "wind.snow"
-            case .blowingDust:
-                return "sun.dust.fill"
-            case .blowingSnow:
-                return "wind.snow"
-            case .breezy:
-                return "wind"
-            case .clear:
-                return "sun.max.fill"
-            case .cloudy:
-                return "cloud.fill"
-            case .drizzle:
-                return "cloud.drizzle.fill"
-            case .flurries:
-                return "cloud.snow.fill"
-            case .foggy:
-                return "cloud.fog.fill"
-            case .freezingDrizzle:
-                return "cloud.drizzle.fill"
-            case .freezingRain:
-                return "cloud.rain.fill"
-            case .frigid:
-                return "thermometer.snowflake"
-            case .hail:
-                return "cloud.hail.fill"
-            case .haze:
-                return "sun.haze.fill"
-            case .heavyRain:
-                return "cloud.heavyrain.fill"
-            case .heavySnow:
-                return "cloud.snow.fill"
-            case .hot:
-                return "thermometer.sun.fill"
-            case .hurricane:
-                return "hurricane"
-            case .isolatedThunderstorms:
-                return "cloud.bolt.fill"
-            case .mostlyClear:
-                return "sun.max.fill"
-            case .mostlyCloudy:
-                return "cloud.sun.fill"
-            case .partlyCloudy:
-                return "cloud.sun.fill"
-            case .rain:
-                return "cloud.rain.fill"
-            case .scatteredThunderstorms:
-                return "cloud.bolt.fill"
-            case .sleet:
-                return "cloud.sleet.fill"
-            case .smoky:
-                return "smoke.fill"
-            case .snow:
-                return "cloud.snow.fill"
-            case .strongStorms:
-                return "tropicalstorm"
-            case .sunFlurries:
-                return "cloud.snow.fill"
-            case .sunShowers:
-                return "cloud.sun.rain.fill"
-            case .thunderstorms:
-                return "cloud.bolt.fill"
-            case .tropicalStorm:
-                return "tropicalstorm"
-            case .windy:
-                return "wind"
-            case .wintryMix:
-                return "wind.snow"
-            @unknown default:
-                return "globe.americas.fill"
-            }
-        }
+extension CurrentWeather {
+    func getIcon() -> String {
+        self.symbolName
+    }
+    
+    func getTemp() -> String {
+        self.temperature.description
+    }
+    
+    func getDew() -> String {
+        "Dew\n" + self.dewPoint.description
+    }
+    
+    func getWind() -> String {
+        "Wind\n" + self.wind.speed.description
+    }
+    
+    func getHumidity() -> String {
+        "Humidity\n" + (Int(self.humidity*100)).description + "%"
+    }
+    
+    func getCloud() -> String {
+        "Cloud\n" + (Int(self.cloudCover*100)).description + "%"
+    }
+    
+    func getCondition() -> String {
+        self.condition.description
     }
 }
+
+extension HourWeather {
+    func getIcon() -> String {
+        self.symbolName
+    }
+    
+    func getTime() -> String {
+        self.date.formatted(date: .omitted, time: .shortened).replacing(":00", with: "")
+    }
+    
+    func getTemp() -> String {
+        self.temperature.description
+    }
+}
+
