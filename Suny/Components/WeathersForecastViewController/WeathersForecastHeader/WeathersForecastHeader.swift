@@ -61,13 +61,13 @@ private extension WeathersForecastHeader {
         stackView.addArrangedSubview(imageView)
         stackView.distribution = .fillEqually
         
-        cityLabel.text = viewModel.cityString
+        cityLabel.text = viewModel.cityString ?? "San Francisco"
         cityLabel.font = .systemFont(ofSize: 45, weight: .bold)
         cityLabel.textColor = .white
         cityLabel.textAlignment = .center
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        temperLabel.text = viewModel.tempString
+        temperLabel.text = viewModel.tempString ?? "3 °C"
         temperLabel.font = .systemFont(ofSize: 35, weight: .bold)
         temperLabel.textColor = .systemMint
         temperLabel.textAlignment = .center

@@ -11,7 +11,7 @@ import WeatherKit
 enum Section: String, CaseIterable {
     case day = "Daily Forecast"
     case hour = "Hourly Forecast"
-    case minute = "Minutely Weathers"
+    case minute = "Minutely Forecast"
 }
 
 protocol WeathersForecastViewModelProtocol {

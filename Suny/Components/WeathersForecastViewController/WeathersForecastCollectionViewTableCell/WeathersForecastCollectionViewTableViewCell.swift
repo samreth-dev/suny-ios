@@ -41,7 +41,7 @@ extension WeathersForecastCollectionViewTableViewCell: UICollectionViewDataSourc
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as! WeatherCollectionViewCell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell else { return UICollectionViewCell() }
         cell.temperLabel.text = viewModel.weathers[indexPath.row].getTemp()
         cell.timeLabel.text = viewModel.weathers[indexPath.row].getTime()
         cell.imageView.image = UIImage(systemName: viewModel.weathers[indexPath.row].getIcon())
