@@ -8,6 +8,7 @@
 import UIKit
 import CoreLocationUI
 import Combine
+import MapKit
 
 class WeatherViewController: UIViewController {
     private var viewModel: WeatherViewModelProtocol
@@ -24,6 +25,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var bottomImageView: UIImageView!
+    @IBOutlet weak var searchButton: UIButton!
     
     init(viewModel: WeatherViewModelProtocol, cancellable: Set<AnyCancellable>) {
         self.viewModel = viewModel
@@ -40,10 +42,7 @@ class WeatherViewController: UIViewController {
         setupViews()
         binding()
         locationConfiguration()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+       
     }
 }
 
@@ -59,12 +58,11 @@ private extension WeatherViewController {
         bottomImageView.layer.backgroundColor = UIColor.black.cgColor
         
         locationButton.addTarget(self, action: #selector(locationConfiguration), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(search), for: .touchUpInside)
     }
     
     func binding() {
         viewModel.publisher.receive(on: DispatchQueue.main).sink { weather in
-            guard let weather else { return }
-            
             self.mainTemperLabel.text = weather.temperature
             self.conditionLabel.text = weather.condition
             self.windLabel.text = weather.wind
@@ -84,6 +82,19 @@ private extension WeatherViewController {
         let destination = LocationViewController(viewModel: viewModel, cancellable: [])
         present(destination, animated: true)
     }
+    
+    @objc func search() {
+        let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: []) { location in
+            print(location)
+            self.viewModel.fetchWeather(location: location)
+            location.fetchCityAndCountry { city, country, error in
+                self.cityLabel.text = city
+            }
+        }
+        let destination = SearchViewController(viewModel: viewModel, cancellable: [])
+        
+        present(destination, animated: true)
+    }
 }
 
 extension WeatherViewController: UICollectionViewDataSource {
@@ -93,11 +104,11 @@ extension WeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as! WeatherCollectionViewCell
-        
-        let weather = viewModel.weathers[indexPath.row]
-        let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.icon, temperString: weather.temperature, timeString: weather.time)
-        
-        cell.config(viewModel: viewModel)
+        if indexPath.row < viewModel.weathers.count {
+            let weather = viewModel.weathers[indexPath.row]
+            let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.icon, temperString: weather.temperature, timeString: weather.time)
+            cell.config(viewModel: viewModel)
+        }
         return cell
     }
     

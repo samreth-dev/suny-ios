@@ -10,7 +10,7 @@ import WeatherKit
 import CoreLocation
 
 protocol WeatherViewModelProtocol {
-    var publisher: Published<LocalWeather?>.Publisher { get }
+    var publisher: Published<LocalWeather>.Publisher { get }
     var bottomImages: [String] { get set }
     var weathers: [LocalWeather] { get set }
     func fetchWeather(location: CLLocation)
@@ -19,11 +19,11 @@ protocol WeatherViewModelProtocol {
 class WeatherViewModel: WeatherViewModelProtocol {
     var weathers: [LocalWeather]
     var bottomImages: [String]
-    var publisher: Published<LocalWeather?>.Publisher { $weather }
-    @Published var weather: LocalWeather?
+    var publisher: Published<LocalWeather>.Publisher { $weather }
+    @Published var weather: LocalWeather
     private var weatherManager: WeatherManagerProtocol
     
-    init(weathers: [LocalWeather], bottomImages: [String], weather: LocalWeather? = nil, weatherManager: WeatherManagerProtocol) {
+    init(weathers: [LocalWeather], bottomImages: [String], weather: LocalWeather, weatherManager: WeatherManagerProtocol) {
         self.weathers = weathers
         self.bottomImages = bottomImages
         self.weather = weather
@@ -33,9 +33,10 @@ class WeatherViewModel: WeatherViewModelProtocol {
     func fetchWeather(location: CLLocation) {
         Task {
             if let result = await weatherManager.fetchWeather(location: location) {
-                self.weather?.mapWeather(weather: result.currentWeather)
-                self.weathers.mapWeather(weathers: result.hourlyForecast.forecast)
+                self.weather.mapWeather(weather: result.currentWeather)
+                self.weathers.mapWeathers(weathers: result.todayHourWeathers.nextHourWeathers)
             }
         }
     }
 }
+
