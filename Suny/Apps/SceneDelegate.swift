@@ -7,6 +7,8 @@
 
 import UIKit
 import CoreLocation
+import MapKit
+import WeatherKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -15,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
   
         let weatherManager = WeatherManager()
-        let weatherViewModel = WeatherViewModel(weathers: [], bottomImages: Constants.bottomImages, weather: nil, weatherManager: weatherManager)
+        let weatherViewModel = WeatherViewModel(weathers: [], bottomImages: Constants.bottomImgStrings, weather: nil, weatherManager: weatherManager)
         let weatherViewController = WeatherViewController(viewModel: weatherViewModel, cancellable: [])
         let navigationController = UINavigationController(rootViewController: weatherViewController)
         
