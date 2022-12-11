@@ -5,7 +5,7 @@
 //  Created by Samreth Kem on 12/9/22.
 //
 
-import Foundation
+import UIKit
 
 struct Constants {
     static let bottomImgStrings = [
@@ -20,4 +20,31 @@ struct Constants {
         "suny-bg-9",
         "suny-bg-10",
     ]
+    
+    static var screenFrame: CGRect {
+        get {
+            guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+                return CGRect()
+            }
+            return window.frame
+        }
+    }
+    
+    static var screenWidth: CGFloat {
+        get {
+            guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+                return CGFloat()
+            }
+            return window.frame.width
+        }
+    }
+    
+    static var screenHeight: CGFloat {
+        get {
+            guard let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) else {
+                return CGFloat()
+            }
+            return window.frame.height
+        }
+    }
 }
