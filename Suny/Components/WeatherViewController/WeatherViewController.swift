@@ -9,6 +9,8 @@ import UIKit
 import CoreLocationUI
 import Combine
 import MapKit
+import SDWebImage
+import SafariServices
 
 class WeatherViewController: UIViewController {
     private var viewModel: WeatherViewModelProtocol
@@ -16,6 +18,7 @@ class WeatherViewController: UIViewController {
     
     private var loadingBackground: UIView!
     private var loadingLabel: UILabel!
+    @IBOutlet weak var sourceImage: UIImageView!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var locationButton: UIButton!
@@ -28,6 +31,7 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var conditionLabel: UILabel!
     @IBOutlet weak var bottomImageView: UIImageView!
     @IBOutlet weak var searchButton: UIButton!
+    @IBOutlet weak var sourceButton: UIButton!
     
     init(viewModel: WeatherViewModelProtocol, cancellable: Set<AnyCancellable>) {
         self.viewModel = viewModel
@@ -87,7 +91,11 @@ private extension WeatherViewController {
         }.store(in: &cancellable)
         
         viewModel.publishers.receive(on: DispatchQueue.main).sink { [weak self] weathers in
-            if let self { self.collectionView.reloadData() }
+            if let self {
+                self.collectionView.reloadData()
+                self.sourceImage.sd_setImage(with: self.viewModel.attribution?.combinedMarkDarkURL, placeholderImage: UIImage(systemName: "cloud.fill"))
+                self.collectionView.reloadData()
+            }
         }.store(in: &cancellable)
     }
     
@@ -103,7 +111,10 @@ private extension WeatherViewController {
         view.addSubview(loadingLabel)
         view.addSubview(locationButton)
     }
-    
+}
+
+//MARK: actions
+private extension WeatherViewController {
     @objc func locationConfiguration() {
         loadingView(status: "Getting Current Location...", loadingTextColor: .white, loadingColor: .systemMint)
         
@@ -150,6 +161,12 @@ private extension WeatherViewController {
         
         present(destination, animated: true)
     }
+    
+    @IBAction func viewSource(_ sender: Any) {
+        guard let url = viewModel.attribution?.legalPageURL else { return }
+        let sfViewController = SFSafariViewController(url: url)
+        present(sfViewController, animated: true)
+    }
 }
 
 //MARK: datasource & delegate
@@ -166,6 +183,7 @@ extension WeatherViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell else { return UICollectionViewCell() }
+        
         let weather = viewModel.weathers[indexPath.row]
         let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.getIcon(), temperString: weather.getTemp(), timeString: weather.getTime())
 
@@ -181,7 +199,7 @@ extension WeatherViewController: UICollectionViewDelegate {
         let tempString = viewModel.mainWeather?.getTemp()
         let iconString = viewModel.mainWeather?.getIcon()
         let weather = viewModel.mainWeather
-        let viewModel = WeathersForecastViewModel(sections: sections, cityString: cityString, tempString: tempString, iconString: iconString, weather: weather)
+        let viewModel = WeathersForecastViewModel(sections: sections, cityString: cityString, tempString: tempString, iconString: iconString, weather: weather, attribution: viewModel.attribution)
         
         present(WeathersForecastViewController(viewModel: viewModel), animated: true)
     }
