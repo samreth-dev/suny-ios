@@ -7,17 +7,14 @@
 
 import UIKit
 import CoreLocationUI
-import Combine
 
 class LocationViewController: UIViewController {
     @IBOutlet weak var requestLabel: UILabel!
     private var locationButton: CLLocationButton!
     private var viewModel: LocationViewModelProtocol
-    private var cancellable: Set<AnyCancellable>
     
-    init(viewModel: LocationViewModelProtocol, cancellable: Set<AnyCancellable>) {
+    init(viewModel: LocationViewModelProtocol) {
         self.viewModel = viewModel
-        self.cancellable = cancellable
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -68,6 +65,6 @@ private extension LocationViewController {
     func binding() {
         viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] location in
             if location != nil, let self = self { self.dismiss(animated: true) }
-        }.store(in: &cancellable)
+        }.store(in: &viewModel.cancellable)
     }
 }

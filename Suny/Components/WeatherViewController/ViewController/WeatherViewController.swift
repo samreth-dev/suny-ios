@@ -7,14 +7,12 @@
 
 import UIKit
 import CoreLocationUI
-import Combine
 import MapKit
 import SDWebImage
 import SafariServices
 
 class WeatherViewController: UIViewController {
     private var viewModel: WeatherViewModelProtocol
-    private var cancellable: Set<AnyCancellable>
     
     private var loadingBackground: UIView!
     private var loadingLabel: UILabel!
@@ -33,9 +31,8 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var sourceButton: UIButton!
     
-    init(viewModel: WeatherViewModelProtocol, cancellable: Set<AnyCancellable>) {
+    init(viewModel: WeatherViewModelProtocol) {
         self.viewModel = viewModel
-        self.cancellable = cancellable
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -88,7 +85,7 @@ private extension WeatherViewController {
             self.humidityLabel.text = weather.getHumidity()
             self.cloudLabel.text = weather.getCloud()
             self.bottomImageView.image = UIImage(named: self.viewModel.bottomImages.randomElement() ?? "")
-        }.store(in: &cancellable)
+        }.store(in: &viewModel.cancellable)
         
         viewModel.publishers.receive(on: DispatchQueue.main).sink { [weak self] weathers in
             if let self {
@@ -96,7 +93,7 @@ private extension WeatherViewController {
                 self.sourceImage.sd_setImage(with: self.viewModel.attribution?.combinedMarkDarkURL, placeholderImage: UIImage(systemName: "cloud.fill"))
                 self.collectionView.reloadData()
             }
-        }.store(in: &cancellable)
+        }.store(in: &viewModel.cancellable)
     }
     
     func loadingView(status: String, loadingTextColor: UIColor, loadingColor: UIColor) {
@@ -119,7 +116,7 @@ private extension WeatherViewController {
         loadingView(status: "Getting Current Location...", loadingTextColor: .white, loadingColor: .systemMint)
         
         let locationManager = LocationManager()
-        let viewModel = LocationViewModel(locationManager: locationManager) { [weak self] location ,city  in
+        let viewModel = LocationViewModel(locationManager: locationManager, cancellable: []) { [weak self] location ,city  in
             guard let self else { return }
             
             self.viewModel.fetchWeather(location: location)
@@ -135,13 +132,13 @@ private extension WeatherViewController {
                 }
             }
         }
-        let destination = LocationViewController(viewModel: viewModel, cancellable: [])
+        let destination = LocationViewController(viewModel: viewModel)
         
         present(destination, animated: true)
     }
     
     @objc func search() {
-        let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: []) { [weak self] location in
+        let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: [], cancellable: []) { [weak self] location in
             guard let self else { return }
             
             self.loadingView(status: "Searching Location...", loadingTextColor: .black, loadingColor: .systemYellow)
@@ -159,7 +156,7 @@ private extension WeatherViewController {
                 }
             }
         }
-        let destination = SearchViewController(viewModel: viewModel, cancellable: [])
+        let destination = SearchViewController(viewModel: viewModel)
         
         present(destination, animated: true)
     }

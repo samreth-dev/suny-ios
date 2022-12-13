@@ -8,6 +8,7 @@
 import Foundation
 import WeatherKit
 import CoreLocation
+import Combine
 
 protocol WeatherViewModelProtocol {
     var publisher: Published<CurrentWeather?>.Publisher { get }
@@ -16,6 +17,7 @@ protocol WeatherViewModelProtocol {
     var mainWeather: Weather? { get set }
     var weathers: [HourWeather] { get set }
     var attribution: WeatherAttribution? { get set }
+    var cancellable: Set<AnyCancellable> { get set }
     
     func fetchWeather(location: CLLocation)
     func fetchCity(location: CLLocation, callback: @escaping (String) -> ())
@@ -29,15 +31,17 @@ class WeatherViewModel {
     var mainWeather: Weather?
     var attribution: WeatherAttribution?
     var bottomImages: [String]
+    var cancellable: Set<AnyCancellable>
     private var weatherManager: WeatherManagerProtocol
     
-    init(weathers: [HourWeather], weather: CurrentWeather?, mainWeather: Weather?, attribution: WeatherAttribution?, bottomImages: [String], weatherManager: WeatherManagerProtocol) {
+    init(weathers: [HourWeather], weather: CurrentWeather?, mainWeather: Weather?, attribution: WeatherAttribution?, bottomImages: [String], weatherManager: WeatherManagerProtocol, cancellable: Set<AnyCancellable>) {
         self.weathers = weathers
         self.weather = weather
         self.mainWeather = mainWeather
         self.attribution = attribution
         self.bottomImages = bottomImages
         self.weatherManager = weatherManager
+        self.cancellable = cancellable
     }
 }
 

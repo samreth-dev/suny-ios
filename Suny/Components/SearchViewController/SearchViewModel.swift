@@ -7,12 +7,14 @@
 
 import Foundation
 import MapKit
+import Combine
 
 protocol SearchViewModelProtocol {
     var publisher: Published<[(city: String, country: String)]>.Publisher { get }
     var completer: MKLocalSearchCompleter { get set }
     var locationCallBack: (CLLocation) -> () { get set }
     var results: [(city: String, country: String)] { get set }
+    var cancellable: Set<AnyCancellable> { get set }
     
     func search(index: Int)
     func setup()
@@ -23,11 +25,13 @@ class SearchViewModel: NSObject {
     var publisher: Published<[(city: String, country: String)]>.Publisher { $results }
     var completer: MKLocalSearchCompleter
     var locationCallBack: (CLLocation) -> ()
+    var cancellable: Set<AnyCancellable>
     @Published var results: [(city: String, country: String)]
     
-    init(completer: MKLocalSearchCompleter, results: [(city: String, country: String)], locationCallBack: @escaping (CLLocation) -> Void) {
+    init(completer: MKLocalSearchCompleter, results: [(city: String, country: String)], cancellable: Set<AnyCancellable>, locationCallBack: @escaping (CLLocation) -> Void) {
         self.completer = completer
         self.results = results
+        self.cancellable = cancellable
         self.locationCallBack = locationCallBack
     }
     

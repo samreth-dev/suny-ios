@@ -7,10 +7,12 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 protocol LocationViewModelProtocol {
     var publisher: Published<CLLocation?>.Publisher { get }
     var locationCallBack: (CLLocation, String) -> () { get set }
+    var cancellable: Set<AnyCancellable> { get set }
     
     func fetchLocation()
 }
@@ -18,13 +20,15 @@ protocol LocationViewModelProtocol {
 class LocationViewModel: NSObject {
     var publisher: Published<CLLocation?>.Publisher { $location }
     var locationCallBack: (CLLocation, String) -> ()
+    var cancellable: Set<AnyCancellable>
     private var locationManager: LocationManagerProtocol
     @Published private var location: CLLocation?
     
-    init(location: CLLocation? = nil, locationManager: LocationManagerProtocol, locationCallBack: @escaping (CLLocation, String) -> Void) {
+    init(location: CLLocation? = nil, locationManager: LocationManagerProtocol, cancellable: Set<AnyCancellable>, locationCallBack: @escaping (CLLocation, String) -> Void) {
         self.location = location
         self.locationCallBack = locationCallBack
         self.locationManager = locationManager
+        self.cancellable = cancellable
     }
 }
 

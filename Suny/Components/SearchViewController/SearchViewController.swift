@@ -6,17 +6,14 @@
 //
 
 import UIKit
-import Combine
 
 class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     private var viewModel: SearchViewModelProtocol
-    private var cancellable: Set<AnyCancellable>
     
-    init(viewModel: SearchViewModelProtocol, cancellable: Set<AnyCancellable>) {
+    init(viewModel: SearchViewModelProtocol) {
         self.viewModel = viewModel
-        self.cancellable = cancellable
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -45,7 +42,7 @@ private extension SearchViewController {
     func binding() {
         viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] results in
             self?.tableView.reloadData()
-        }.store(in: &cancellable)
+        }.store(in: &viewModel.cancellable)
     }
     
     @IBAction func cancelButton(_ sender: Any) {
