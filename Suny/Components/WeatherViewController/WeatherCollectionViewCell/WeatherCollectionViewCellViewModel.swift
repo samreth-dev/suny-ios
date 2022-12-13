@@ -21,6 +21,6 @@ class WeatherCollectionViewCellViewModel: WeatherCollectionViewCellViewModelProt
     init(imageString: String, temperString: String, timeString: String) {
         self.imageString = imageString
         self.temperString = temperString
-        self.timeString = String(timeString.dropLast(6))
+        self.timeString = timeString
     }
 }
