@@ -113,7 +113,7 @@ private extension WeatherViewController {
     }
 }
 
-//MARK: actions
+//MARK: private actions
 private extension WeatherViewController {
     @objc func locationConfiguration() {
         loadingView(status: "Getting Current Location...", loadingTextColor: .white, loadingColor: .systemMint)
@@ -121,6 +121,7 @@ private extension WeatherViewController {
         let locationManager = LocationManager()
         let viewModel = LocationViewModel(locationManager: locationManager) { [weak self] location ,city  in
             guard let self else { return }
+            
             self.viewModel.fetchWeather(location: location)
             self.cityLabel.text = city
             self.searchButton.isUserInteractionEnabled = true
@@ -142,6 +143,7 @@ private extension WeatherViewController {
     @objc func search() {
         let viewModel = SearchViewModel(completer: MKLocalSearchCompleter(), results: []) { [weak self] location in
             guard let self else { return }
+            
             self.loadingView(status: "Searching Location...", loadingTextColor: .black, loadingColor: .systemYellow)
             
             self.viewModel.fetchWeather(location: location)

@@ -22,10 +22,10 @@ protocol WeatherViewModelProtocol {
 }
 
 class WeatherViewModel {
-    var publishers: Published<[HourWeather]>.Publisher { $weathers}
-    var publisher: Published<CurrentWeather?>.Publisher { $weather }
     @Published var weathers: [HourWeather]
     @Published var weather: CurrentWeather?
+    var publishers: Published<[HourWeather]>.Publisher { $weathers}
+    var publisher: Published<CurrentWeather?>.Publisher { $weather }
     var mainWeather: Weather?
     var attribution: WeatherAttribution?
     var bottomImages: [String]
