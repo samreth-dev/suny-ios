@@ -29,6 +29,9 @@
 		5365F3742945A3F200CBE895 /* WeathersForecastCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5365F3732945A3F200CBE895 /* WeathersForecastCellViewModel.swift */; };
 		537683BA2946364E00613EAC /* WeathersForecastHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537683B92946364E00613EAC /* WeathersForecastHeader.swift */; };
 		537683BD2946432500613EAC /* WeathersForecastHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537683BC2946432500613EAC /* WeathersForecastHeaderViewModel.swift */; };
+		537AC61129483EA800D3AFD0 /* SDWebImage in Frameworks */ = {isa = PBXBuildFile; productRef = 537AC61029483EA800D3AFD0 /* SDWebImage */; };
+		537AC6132948429A00D3AFD0 /* WeatherForecastFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537AC6122948429A00D3AFD0 /* WeatherForecastFooter.swift */; };
+		537AC615294842A700D3AFD0 /* WeatherForecastFooterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 537AC614294842A700D3AFD0 /* WeatherForecastFooterViewModel.swift */; };
 		5394B45829452F7600833FF8 /* WeatherCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5394B45729452F7600833FF8 /* WeatherCollectionViewCellViewModel.swift */; };
 		5394B45A29452F9D00833FF8 /* WeatherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5394B45929452F9D00833FF8 /* WeatherExtensions.swift */; };
 		5394B4632945399B00833FF8 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5394B4612945399B00833FF8 /* SearchViewController.swift */; };
@@ -64,6 +67,8 @@
 		5365F3732945A3F200CBE895 /* WeathersForecastCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastCellViewModel.swift; sourceTree = "<group>"; };
 		537683B92946364E00613EAC /* WeathersForecastHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastHeader.swift; sourceTree = "<group>"; };
 		537683BC2946432500613EAC /* WeathersForecastHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeathersForecastHeaderViewModel.swift; sourceTree = "<group>"; };
+		537AC6122948429A00D3AFD0 /* WeatherForecastFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastFooter.swift; sourceTree = "<group>"; };
+		537AC614294842A700D3AFD0 /* WeatherForecastFooterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastFooterViewModel.swift; sourceTree = "<group>"; };
 		5394B45729452F7600833FF8 /* WeatherCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		5394B45929452F9D00833FF8 /* WeatherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherExtensions.swift; sourceTree = "<group>"; };
 		5394B4612945399B00833FF8 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				537AC61129483EA800D3AFD0 /* SDWebImage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,8 +203,10 @@
 				537683BB2946431900613EAC /* WeathersForecastHeader */,
 				5365F36E2945A33300CBE895 /* WeathersForecastCollectionViewTableCell */,
 				5365F36829459A3800CBE895 /* WeathersForecastViewController.swift */,
+				537AC614294842A700D3AFD0 /* WeatherForecastFooterViewModel.swift */,
 				5365F36929459A3800CBE895 /* WeathersForecastViewController.xib */,
 				5365F36C29459A3F00CBE895 /* WeathersForecastViewModel.swift */,
+				537AC6122948429A00D3AFD0 /* WeatherForecastFooter.swift */,
 			);
 			path = WeathersForecastViewController;
 			sourceTree = "<group>";
@@ -266,6 +274,9 @@
 			dependencies = (
 			);
 			name = Suny;
+			packageProductDependencies = (
+				537AC61029483EA800D3AFD0 /* SDWebImage */,
+			);
 			productName = Suny;
 			productReference = 5314970C29440FEA002FEA2D /* Suny.app */;
 			productType = "com.apple.product-type.application";
@@ -294,6 +305,9 @@
 				Base,
 			);
 			mainGroup = 5314970329440FEA002FEA2D;
+			packageReferences = (
+				537AC60F29483EA800D3AFD0 /* XCRemoteSwiftPackageReference "SDWebImage" */,
+			);
 			productRefGroup = 5314970D29440FEA002FEA2D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -334,12 +348,14 @@
 				5314972F29441B4A002FEA2D /* LocationManager.swift in Sources */,
 				5314972C29441A7F002FEA2D /* WeatherManager.swift in Sources */,
 				5314973229443450002FEA2D /* WeatherViewController.swift in Sources */,
+				537AC615294842A700D3AFD0 /* WeatherForecastFooterViewModel.swift in Sources */,
 				5365F36A29459A3800CBE895 /* WeathersForecastViewController.swift in Sources */,
 				5394B4632945399B00833FF8 /* SearchViewController.swift in Sources */,
 				5314971029440FEA002FEA2D /* AppDelegate.swift in Sources */,
 				5314971229440FEA002FEA2D /* SceneDelegate.swift in Sources */,
 				5314973E29444CCF002FEA2D /* CLLocationExtensions.swift in Sources */,
 				5365F3742945A3F200CBE895 /* WeathersForecastCellViewModel.swift in Sources */,
+				537AC6132948429A00D3AFD0 /* WeatherForecastFooter.swift in Sources */,
 				5394B466294539A100833FF8 /* SearchViewModel.swift in Sources */,
 				5365F3712945A38100CBE895 /* WeathersForecastCollectionViewTableViewCell.swift in Sources */,
 				5365F36D29459A3F00CBE895 /* WeathersForecastViewModel.swift in Sources */,
@@ -562,6 +578,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		537AC60F29483EA800D3AFD0 /* XCRemoteSwiftPackageReference "SDWebImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImage";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		537AC61029483EA800D3AFD0 /* SDWebImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 537AC60F29483EA800D3AFD0 /* XCRemoteSwiftPackageReference "SDWebImage" */;
+			productName = SDWebImage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5314970429440FEA002FEA2D /* Project object */;
 }
