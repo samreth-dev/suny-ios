@@ -22,7 +22,6 @@ extension WeatherManager: WeatherManagerProtocol {
         let weather = try? await service.weather(for: location)
         let attribution = try? await service.attribution
         if let weather, let attribution {
-            print(attribution.combinedMarkDarkURL)
             return (weather, attribution)
         } else {
             return nil

@@ -40,6 +40,7 @@ class LocationViewController: UIViewController {
             locationButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             locationButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30),
             locationButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30),
+            
             requestLabel.bottomAnchor.constraint(equalTo: locationButton.topAnchor, constant: -30),
             requestLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
             requestLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16)
@@ -60,12 +61,13 @@ private extension LocationViewController {
         locationButton.icon = .arrowFilled
         locationButton.backgroundColor = .systemMint
         locationButton.cornerRadius = 30
+        
         requestLabel.translatesAutoresizingMaskIntoConstraints = false
     }
     
     func binding() {
-        viewModel.publisher.receive(on: DispatchQueue.main).sink { location in
-            if location != nil { self.dismiss(animated: true) }
+        viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] location in
+            if location != nil, let self = self { self.dismiss(animated: true) }
         }.store(in: &cancellable)
     }
 }

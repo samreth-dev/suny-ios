@@ -11,6 +11,7 @@ import Foundation
 protocol AnyWeather {
     associatedtype T
     var weather: T { get set }
+    
     func getIcon() -> String
     func getTime() -> String
     func getTemp() -> String
@@ -96,6 +97,7 @@ extension DayWeather: AnyWeather {
             self = newValue
         }
     }
+    
     func getIcon() -> String {
         self.symbolName
     }
@@ -118,6 +120,7 @@ extension HourWeather: AnyWeather {
             self = newValue
         }
     }
+    
     func getIcon() -> String {
         self.symbolName
     }
@@ -142,6 +145,7 @@ extension MinuteWeather: AnyWeather {
             self = newValue
         }
     }
+    
     func getIcon() -> String {
         "sun.min"
     }

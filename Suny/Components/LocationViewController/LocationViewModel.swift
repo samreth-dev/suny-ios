@@ -11,6 +11,7 @@ import CoreLocation
 protocol LocationViewModelProtocol {
     var publisher: Published<CLLocation?>.Publisher { get }
     var locationCallBack: (CLLocation, String) -> () { get set }
+    
     func fetchLocation()
 }
 

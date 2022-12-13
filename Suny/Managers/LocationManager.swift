@@ -17,14 +17,16 @@ protocol LocationManagerDelegate: NSObject {
     func didFetch(location: CLLocation)
 }
 
-class LocationManager: NSObject, LocationManagerProtocol {
+class LocationManager: NSObject{
     weak var delegate: LocationManagerDelegate?
     private var clmanager = CLLocationManager()
     
     init(delegate: LocationManagerDelegate? = nil) {
         self.delegate = delegate
     }
-    
+}
+
+extension LocationManager: LocationManagerProtocol {
     func requestLocationAuth() {
         clmanager.delegate = self
         clmanager.requestAlwaysAuthorization()
