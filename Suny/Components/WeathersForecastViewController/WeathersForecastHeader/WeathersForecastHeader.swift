@@ -22,6 +22,10 @@ class WeathersForecastHeader: UIView {
         setupViews()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError()
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         NSLayoutConstraint.activate([
@@ -34,10 +38,6 @@ class WeathersForecastHeader: UIView {
             
             stackView.heightAnchor.constraint(equalToConstant: 60)
         ])
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError()
     }
 }
 

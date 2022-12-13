@@ -16,7 +16,6 @@ class WeathersForecastViewController: UIViewController {
     init(viewModel: any WeathersForecastViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -28,7 +27,7 @@ class WeathersForecastViewController: UIViewController {
         setupViews()
     }
     
-    func setupViews() {
+    private func setupViews() {
         let nib = UINib(nibName: "WeathersForecastCollectionViewTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "WeathersForecastCollectionViewTableViewCell")
         tableView.dataSource = self
