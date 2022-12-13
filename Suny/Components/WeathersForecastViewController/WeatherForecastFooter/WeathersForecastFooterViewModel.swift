@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol WeatherForecastFooterViewModelProtocol {
+protocol WeathersForecastFooterViewModelProtocol {
     var imageUrl: URL { get set }
     var sourceCallBack: () -> () { get set }
 }
 
-class WeathersForecastFooterViewModel: WeatherForecastFooterViewModelProtocol {
+class WeathersForecastFooterViewModel: WeathersForecastFooterViewModelProtocol {
     var imageUrl: URL
     var sourceCallBack: () -> ()
     init(imageUrl: URL, sourceCallBack: @escaping () -> Void) {
