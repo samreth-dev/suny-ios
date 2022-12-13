@@ -32,7 +32,6 @@ class WeathersForecastCollectionViewTableViewCell: UITableViewCell {
         
         flowLayout.itemSize = CGSize(width: 130, height: 50)
     }
-    
 }
 
 extension WeathersForecastCollectionViewTableViewCell: UICollectionViewDataSource {
@@ -42,9 +41,13 @@ extension WeathersForecastCollectionViewTableViewCell: UICollectionViewDataSourc
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell else { return UICollectionViewCell() }
-        cell.temperLabel.text = viewModel.weathers[indexPath.row].getTemp()
-        cell.timeLabel.text = viewModel.weathers[indexPath.row].getTime()
-        cell.imageView.image = UIImage(systemName: viewModel.weathers[indexPath.row].getIcon())
+        
+        let temperString = viewModel.weathers[indexPath.row].getTemp()
+        let timeString = viewModel.weathers[indexPath.row].getTime()
+        let imageString = viewModel.weathers[indexPath.row].getIcon()   
+        let viewModel = WeatherCollectionViewCellViewModel(imageString: imageString, temperString: temperString, timeString: timeString)
+        
+        cell.config(viewModel: viewModel)
         return cell
     }
 }
