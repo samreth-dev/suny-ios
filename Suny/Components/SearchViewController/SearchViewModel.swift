@@ -13,12 +13,13 @@ protocol SearchViewModelProtocol {
     var completer: MKLocalSearchCompleter { get set }
     var locationCallBack: (CLLocation) -> () { get set }
     var results: [(city: String, country: String)] { get set }
+    
     func search(index: Int)
     func setup()
     func getLocationString(index: Int) -> String
 }
 
-class SearchViewModel: NSObject, SearchViewModelProtocol {
+class SearchViewModel: NSObject {
     var publisher: Published<[(city: String, country: String)]>.Publisher { $results }
     var completer: MKLocalSearchCompleter
     var locationCallBack: (CLLocation) -> ()
@@ -30,6 +31,22 @@ class SearchViewModel: NSObject, SearchViewModelProtocol {
         self.locationCallBack = locationCallBack
     }
     
+    private func buildPlace(_ title: [String],_ subtitle: [String], _ completion: @escaping ((city: String, country: String)) -> Void){
+        
+        var city: String = ""
+        var country: String = ""
+        
+        if title.count > 1 && subtitle.count >= 1 {
+            city = title.joined(separator: ", ")
+            country = subtitle.count == 1 && subtitle[0] != "" ? subtitle.first! : title.last!
+        }
+      
+        completion((city, country))
+    }
+}
+
+//MARK: extension for SearchViewModelProtocol
+extension SearchViewModel: SearchViewModelProtocol {
     func setup() {
         completer.delegate = self
         completer.region = MKCoordinateRegion(.world)
@@ -58,6 +75,7 @@ class SearchViewModel: NSObject, SearchViewModelProtocol {
     }
 }
 
+//MARK: extension for MKLocalSearchCompleterDelegate
 extension SearchViewModel: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         results = self.getCityList(results: completer.results)
@@ -83,19 +101,6 @@ extension SearchViewModel: MKLocalSearchCompleterDelegate {
         }
         
         return searchResults
-    }
-    
-    func buildPlace(_ title: [String],_ subtitle: [String], _ completion: @escaping ((city: String, country: String)) -> Void){
-        
-        var city: String = ""
-        var country: String = ""
-        
-        if title.count > 1 && subtitle.count >= 1 {
-            city = title.joined(separator: ", ")
-            country = subtitle.count == 1 && subtitle[0] != "" ? subtitle.first! : title.last!
-        }
-      
-        completion((city, country))
     }
 }
 
