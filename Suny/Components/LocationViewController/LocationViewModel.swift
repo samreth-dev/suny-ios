@@ -14,7 +14,7 @@ protocol LocationViewModelProtocol {
     func fetchLocation()
 }
 
-class LocationViewModel: NSObject, LocationViewModelProtocol {
+class LocationViewModel: NSObject {
     var publisher: Published<CLLocation?>.Publisher { $location }
     var locationCallBack: (CLLocation, String) -> ()
     private var locationManager: LocationManagerProtocol
@@ -25,7 +25,9 @@ class LocationViewModel: NSObject, LocationViewModelProtocol {
         self.locationCallBack = locationCallBack
         self.locationManager = locationManager
     }
-    
+}
+
+extension LocationViewModel: LocationViewModelProtocol {
     func fetchLocation() {
         locationManager.delegate = self
         locationManager.requestLocationAuth()
