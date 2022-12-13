@@ -15,39 +15,30 @@ enum Section: String, CaseIterable {
 }
 
 protocol WeathersForecastViewModelProtocol {
-    func getWeathers(index: Int) -> [any AnyWeather]
     var sections: [Section] { get set }
     var cityString: String? { get set }
     var tempString: String? { get set }
     var iconString: String? { get set }
+    var attribution: WeatherAttribution? { get set }
+    
+    func getWeathers(index: Int) -> [any AnyWeather]
 }
 
-class WeathersForecastViewModel: WeathersForecastViewModelProtocol {
+class WeathersForecastViewModel {
     var sections: [Section]
     var cityString: String?
     var tempString: String?
     var iconString: String?
+    var attribution: WeatherAttribution?
     private var weather: Weather?
     
-    init(sections: [Section], cityString: String?, tempString: String?, iconString: String?, weather: Weather?) {
+    init(sections: [Section], cityString: String?, tempString: String?, iconString: String?, weather: Weather?, attribution: WeatherAttribution?) {
         self.sections = sections
         self.cityString = cityString
         self.tempString = tempString
         self.iconString = iconString
         self.weather = weather
-    }
-    
-    func getWeathers(index: Int) -> [any AnyWeather] {
-        switch index {
-        case 0:
-            return getDayWeathers()
-        case 1:
-            return getHourWeathers()
-        case 2:
-            return getMinuteWeathers()
-        default:
-            return []
-        }
+        self.attribution = attribution
     }
     
     private func getDayWeathers() -> [DayWeather] {
@@ -60,5 +51,20 @@ class WeathersForecastViewModel: WeathersForecastViewModelProtocol {
     
     private func getMinuteWeathers() -> [MinuteWeather] {
         weather?.minuteForecast?.forecast ?? []
+    }
+}
+
+extension WeathersForecastViewModel: WeathersForecastViewModelProtocol {
+    func getWeathers(index: Int) -> [any AnyWeather] {
+        switch index {
+        case 0:
+            return getDayWeathers()
+        case 1:
+            return getHourWeathers()
+        case 2:
+            return getMinuteWeathers()
+        default:
+            return []
+        }
     }
 }

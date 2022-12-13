@@ -6,8 +6,7 @@
 //
 
 import UIKit
-
-
+import SafariServices
 
 class WeathersForecastViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -17,6 +16,7 @@ class WeathersForecastViewController: UIViewController {
     init(viewModel: any WeathersForecastViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -34,11 +34,19 @@ class WeathersForecastViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         
-        let viewModel = WeathersForecastHeaderViewModel(cityString: viewModel.cityString, tempString: viewModel.tempString, iconString: viewModel.iconString)
-        let headerView = WeathersForecastHeader(viewModel: viewModel)
+        let viewModelHeader = WeathersForecastHeaderViewModel(cityString: viewModel.cityString, tempString: viewModel.tempString, iconString: viewModel.iconString)
+        let headerView = WeathersForecastHeader(viewModel: viewModelHeader)
         headerView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 250)
         
         tableView.tableHeaderView = headerView
+        
+        let viewModelFooter = WeathersForecastFooterViewModel(imageUrl: viewModel.attribution!.combinedMarkDarkURL) {
+            let sfViewController = SFSafariViewController(url: self.viewModel.attribution!.legalPageURL)
+            self.present(sfViewController, animated: true)
+        }
+        let footerView = WeathersForecastFooter(viewModel: viewModelFooter)
+        footerView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 70)
+        tableView.tableFooterView = footerView
     }
 }
 
