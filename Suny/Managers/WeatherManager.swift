@@ -10,13 +10,22 @@ import WeatherKit
 import CoreLocation
 
 protocol WeatherManagerProtocol {
-    func fetchWeather(location: CLLocation) async -> Weather?
+    func fetchWeather(location: CLLocation) async -> (Weather, WeatherAttribution)?
 }
 
 class WeatherManager: WeatherManagerProtocol {
     private let service = WeatherService.shared
-    
-    func fetchWeather(location: CLLocation) async -> Weather? {
-        try? await service.weather(for: location)
+}
+
+extension WeatherManager: WeatherManagerProtocol {
+    func fetchWeather(location: CLLocation) async -> (Weather, WeatherAttribution)?  {
+        let weather = try? await service.weather(for: location)
+        let attribution = try? await service.attribution
+        if let weather, let attribution {
+            print(attribution.combinedMarkDarkURL)
+            return (weather, attribution)
+        } else {
+            return nil
+        }
     }
 }
