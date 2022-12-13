@@ -21,7 +21,7 @@ protocol WeatherViewModelProtocol {
     func fetchCity(location: CLLocation, callback: @escaping (String) -> ())
 }
 
-class WeatherViewModel: WeatherViewModelProtocol {
+class WeatherViewModel {
     var publishers: Published<[HourWeather]>.Publisher { $weathers}
     var publisher: Published<CurrentWeather?>.Publisher { $weather }
     @Published var weathers: [HourWeather]
