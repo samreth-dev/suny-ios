@@ -13,7 +13,7 @@ protocol WeatherManagerProtocol {
     func fetchWeather(location: CLLocation) async -> (Weather, WeatherAttribution)?
 }
 
-class WeatherManager: WeatherManagerProtocol {
+class WeatherManager {
     private let service = WeatherService.shared
 }
 
