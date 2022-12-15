@@ -9,12 +9,12 @@ import Foundation
 import WeatherKit
 
 protocol WeathersForecastCellViewModelProtocol {
-    var weathers: [any AnyWeather] { get set }
+    var weathers: [AnyWeather] { get set }
 }
 
 class WeathersForecastCellViewModel: WeathersForecastCellViewModelProtocol {
-    var weathers: [any AnyWeather]
-    init(weathers: [any AnyWeather]) {
+    var weathers: [AnyWeather]
+    init(weathers: [AnyWeather]) {
         self.weathers = weathers
     }
 }
