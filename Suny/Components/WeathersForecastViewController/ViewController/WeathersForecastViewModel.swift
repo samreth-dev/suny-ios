@@ -21,7 +21,7 @@ protocol WeathersForecastViewModelProtocol {
     var iconString: String? { get set }
     var attribution: WeatherAttribution? { get set }
     
-    func getWeathers(index: Int) -> [any AnyWeather]
+    func getWeathers(index: Int) -> [AnyWeather]
 }
 
 class WeathersForecastViewModel {
@@ -55,7 +55,7 @@ class WeathersForecastViewModel {
 }
 
 extension WeathersForecastViewModel: WeathersForecastViewModelProtocol {
-    func getWeathers(index: Int) -> [any AnyWeather] {
+    func getWeathers(index: Int) -> [AnyWeather] {
         switch index {
         case 0:
             return getDayWeathers()
