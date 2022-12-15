@@ -10,7 +10,7 @@ import MapKit
 import Combine
 
 protocol SearchViewModelProtocol {
-    var publisher: Published<[(city: String, country: String)]>.Publisher { get }
+    var locationPublisher: Published<[(city: String, country: String)]>.Publisher { get }
     var completer: MKLocalSearchCompleter { get set }
     var locationCallBack: (CLLocation) -> () { get set }
     var results: [(city: String, country: String)] { get set }
@@ -22,7 +22,7 @@ protocol SearchViewModelProtocol {
 }
 
 class SearchViewModel: NSObject {
-    var publisher: Published<[(city: String, country: String)]>.Publisher { $results }
+    var locationPublisher: Published<[(city: String, country: String)]>.Publisher { $results }
     var completer: MKLocalSearchCompleter
     var locationCallBack: (CLLocation) -> ()
     var cancellable: Set<AnyCancellable>

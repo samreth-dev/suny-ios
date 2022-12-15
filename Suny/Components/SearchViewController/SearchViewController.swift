@@ -40,7 +40,7 @@ private extension SearchViewController {
     }
     
     func binding() {
-        viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] results in
+        viewModel.locationPublisher.receive(on: DispatchQueue.main).sink { [weak self] results in
             self?.tableView.reloadData()
         }.store(in: &viewModel.cancellable)
     }
