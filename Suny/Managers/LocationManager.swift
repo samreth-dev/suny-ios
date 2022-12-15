@@ -21,7 +21,7 @@ class LocationManager: NSObject{
     weak var delegate: LocationManagerDelegate?
     private var clmanager = CLLocationManager()
     
-    init(delegate: LocationManagerDelegate? = nil) {
+    init(delegate: LocationManagerDelegate?) {
         self.delegate = delegate
     }
 }
