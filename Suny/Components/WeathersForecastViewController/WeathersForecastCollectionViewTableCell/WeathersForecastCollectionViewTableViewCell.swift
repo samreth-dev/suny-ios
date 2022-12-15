@@ -16,10 +16,6 @@ class WeathersForecastCollectionViewTableViewCell: UITableViewCell {
         super.awakeFromNib()
         setupViews()
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
     
     func config(viewModel: WeathersForecastCellViewModelProtocol) {
         self.viewModel = viewModel
