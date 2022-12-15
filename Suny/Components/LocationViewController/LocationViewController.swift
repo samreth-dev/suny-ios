@@ -11,11 +11,11 @@ import CoreLocationUI
 class LocationViewController: UIViewController {
     @IBOutlet weak var requestLabel: UILabel!
     private var locationButton: CLLocationButton!
-    private var viewModel: LocationViewModelProtocol
+    private var viewModel: LocationViewModelProtocol!
     
     init(viewModel: LocationViewModelProtocol) {
-        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
     }
     
     required init?(coder: NSCoder) {
@@ -64,7 +64,7 @@ private extension LocationViewController {
     
     func binding() {
         viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] location in
-            if location != nil, let self = self { self.dismiss(animated: true) }
+            if let self { self.dismiss(animated: true) }
         }.store(in: &viewModel.cancellable)
     }
 }
