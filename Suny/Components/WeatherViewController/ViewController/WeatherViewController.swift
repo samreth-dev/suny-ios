@@ -74,7 +74,7 @@ private extension WeatherViewController {
     }
     
     func binding() {
-        viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] weather in
+        viewModel.currentWeatherPublisher.receive(on: DispatchQueue.main).sink { [weak self] weather in
             guard let weather else { return }
             guard let self else { return }
             
@@ -87,7 +87,7 @@ private extension WeatherViewController {
             self.bottomImageView.image = UIImage(named: self.viewModel.bottomImages.randomElement() ?? "")
         }.store(in: &viewModel.cancellable)
         
-        viewModel.publishers.receive(on: DispatchQueue.main).sink { [weak self] weathers in
+        viewModel.hourWeathersPublisher.receive(on: DispatchQueue.main).sink { [weak self] weathers in
             if let self {
                 self.collectionView.reloadData()
                 self.sourceImage.sd_setImage(with: self.viewModel.attribution?.combinedMarkDarkURL, placeholderImage: UIImage(systemName: "cloud.fill"))
@@ -171,19 +171,19 @@ private extension WeatherViewController {
 //MARK: datasource & delegate
 extension WeatherViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if viewModel.weathers.count == 0 {
+        if viewModel.hourWeathers.count == 0 {
             collectionView.backgroundColor = .clear
             return 0
         } else {
             collectionView.backgroundColor = .black
-            return viewModel.weathers.count
+            return viewModel.hourWeathers.count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCollectionViewCell", for: indexPath) as? WeatherCollectionViewCell else { return UICollectionViewCell() }
         
-        let weather = viewModel.weathers[indexPath.row]
+        let weather = viewModel.hourWeathers[indexPath.row]
         let viewModel = WeatherCollectionViewCellViewModel(imageString: weather.getIcon(), temperString: weather.getTemp(), timeString: String(weather.getTime().dropLast(6)))
 
         cell.config(viewModel: viewModel)

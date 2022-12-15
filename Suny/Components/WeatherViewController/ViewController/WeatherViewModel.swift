@@ -11,11 +11,11 @@ import CoreLocation
 import Combine
 
 protocol WeatherViewModelProtocol {
-    var publisher: Published<CurrentWeather?>.Publisher { get }
-    var publishers: Published<[HourWeather]>.Publisher { get }
+    var currentWeatherPublisher: Published<CurrentWeather?>.Publisher { get }
+    var hourWeathersPublisher: Published<[HourWeather]>.Publisher { get }
     var bottomImages: [String] { get set }
     var mainWeather: Weather? { get set }
-    var weathers: [HourWeather] { get set }
+    var hourWeathers: [HourWeather] { get set }
     var attribution: WeatherAttribution? { get set }
     var cancellable: Set<AnyCancellable> { get set }
     
@@ -24,19 +24,19 @@ protocol WeatherViewModelProtocol {
 }
 
 class WeatherViewModel {
-    @Published var weathers: [HourWeather]
-    @Published var weather: CurrentWeather?
-    var publishers: Published<[HourWeather]>.Publisher { $weathers}
-    var publisher: Published<CurrentWeather?>.Publisher { $weather }
+    @Published var hourWeathers: [HourWeather]
+    @Published var currentWeather: CurrentWeather?
+    var hourWeathersPublisher: Published<[HourWeather]>.Publisher { $hourWeathers}
+    var currentWeatherPublisher: Published<CurrentWeather?>.Publisher { $currentWeather }
     var mainWeather: Weather?
     var attribution: WeatherAttribution?
     var bottomImages: [String]
     var cancellable: Set<AnyCancellable>
     private var weatherManager: WeatherManagerProtocol
     
-    init(weathers: [HourWeather], weather: CurrentWeather?, mainWeather: Weather?, attribution: WeatherAttribution?, bottomImages: [String], weatherManager: WeatherManagerProtocol, cancellable: Set<AnyCancellable>) {
-        self.weathers = weathers
-        self.weather = weather
+    init(hourWeathers: [HourWeather], currentWeather: CurrentWeather?, mainWeather: Weather?, attribution: WeatherAttribution?, bottomImages: [String], weatherManager: WeatherManagerProtocol, cancellable: Set<AnyCancellable>) {
+        self.hourWeathers = hourWeathers
+        self.currentWeather = currentWeather
         self.mainWeather = mainWeather
         self.attribution = attribution
         self.bottomImages = bottomImages
@@ -50,10 +50,10 @@ extension WeatherViewModel: WeatherViewModelProtocol {
         Task { [weak self] in
             guard let self else { return }
             if let result = await weatherManager.fetchWeather(location: location) {
-                self.weather = result.0.currentWeather
+                self.currentWeather = result.0.currentWeather
                 self.mainWeather = result.0
                 self.attribution = result.1
-                self.weathers = result.0.todayHourWeathers.nextHourWeathers
+                self.hourWeathers = result.0.todayHourWeathers.nextHourWeathers
             }
         }
     }

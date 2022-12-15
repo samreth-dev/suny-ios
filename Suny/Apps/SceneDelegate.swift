@@ -17,7 +17,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
   
         let weatherManager = WeatherManager()
-        let weatherViewModel = WeatherViewModel(weathers: [], weather: nil, mainWeather: nil, attribution: nil, bottomImages: Constants.bottomImgStrings, weatherManager: weatherManager, cancellable: [])
+        let weatherViewModel = WeatherViewModel(hourWeathers: [], currentWeather: nil, mainWeather: nil, attribution: nil, bottomImages: Constants.bottomImgStrings, weatherManager: weatherManager, cancellable: [])
         let weatherViewController = WeatherViewController(viewModel: weatherViewModel)
         let navigationController = UINavigationController(rootViewController: weatherViewController)
         
