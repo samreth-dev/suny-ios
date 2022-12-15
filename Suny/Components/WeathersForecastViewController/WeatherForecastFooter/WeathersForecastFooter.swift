@@ -10,11 +10,11 @@ import UIKit
 class WeathersForecastFooter: UIView {
     private var tradeMarkImage: UIImageView!
     private var tradeMarkLabel: UILabel!
-    private var viewModel: WeathersForecastFooterViewModelProtocol
+    private var viewModel: WeathersForecastFooterViewModelProtocol!
     
     init(viewModel: WeathersForecastFooterViewModelProtocol) {
-        self.viewModel = viewModel
         super.init(frame: CGRect())
+        self.viewModel = viewModel
         initViews()
         setupViews()
     }
