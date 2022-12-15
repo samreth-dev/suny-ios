@@ -13,11 +13,11 @@ class WeathersForecastHeader: UIView {
     private var temperLabel: UILabel!
     private var stackView: UIStackView!
     private var leftSpacer: UILayoutGuide!
-    private var viewModel: WeathersForecastHeaderViewModelProtocol
+    private var viewModel: WeathersForecastHeaderViewModelProtocol!
     
     init(viewModel: WeathersForecastHeaderViewModelProtocol) {
-        self.viewModel = viewModel
         super.init(frame: .zero)
+        self.viewModel = viewModel
         initViews()
         setupViews()
     }
@@ -61,13 +61,13 @@ private extension WeathersForecastHeader {
         stackView.addArrangedSubview(imageView)
         stackView.distribution = .fillEqually
         
-        cityLabel.text = viewModel.cityString ?? "San Francisco"
+        cityLabel.text = viewModel.cityString ?? "N/A"
         cityLabel.font = .systemFont(ofSize: 45, weight: .bold)
         cityLabel.textColor = .white
         cityLabel.textAlignment = .center
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        temperLabel.text = viewModel.tempString ?? "3 °C"
+        temperLabel.text = viewModel.tempString ?? "N/A"
         temperLabel.font = .systemFont(ofSize: 35, weight: .bold)
         temperLabel.textColor = .systemMint
         temperLabel.textAlignment = .center
