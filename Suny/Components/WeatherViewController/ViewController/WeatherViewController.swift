@@ -12,7 +12,7 @@ import SDWebImage
 import SafariServices
 
 class WeatherViewController: UIViewController {
-    private var viewModel: WeatherViewModelProtocol
+    private var viewModel: WeatherViewModelProtocol!
     
     private var loadingBackground: UIView!
     private var loadingLabel: UILabel!
@@ -32,8 +32,8 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var sourceButton: UIButton!
     
     init(viewModel: WeatherViewModelProtocol) {
-        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
     }
     
     required init?(coder: NSCoder) {
@@ -115,7 +115,7 @@ private extension WeatherViewController {
     @objc func locationConfiguration() {
         loadingView(status: "Getting Current Location...", loadingTextColor: .white, loadingColor: .systemMint)
         
-        let locationManager = LocationManager()
+        let locationManager = LocationManager(delegate: nil)
         let viewModel = LocationViewModel(locationManager: locationManager, cancellable: []) { [weak self] location ,city  in
             guard let self else { return }
             
