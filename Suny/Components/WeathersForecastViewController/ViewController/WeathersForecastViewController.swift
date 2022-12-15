@@ -11,11 +11,11 @@ import SafariServices
 class WeathersForecastViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var layout: UICollectionViewFlowLayout!
-    private var viewModel: any WeathersForecastViewModelProtocol
+    private var viewModel: WeathersForecastViewModelProtocol!
 
     init(viewModel: any WeathersForecastViewModelProtocol) {
-        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
     }
     
     required init?(coder: NSCoder) {
