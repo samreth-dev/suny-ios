@@ -10,7 +10,7 @@ import CoreLocation
 import Combine
 
 protocol LocationViewModelProtocol {
-    var publisher: Published<CLLocation?>.Publisher { get }
+    var locationPublisher: Published<CLLocation?>.Publisher { get }
     var locationCallBack: (CLLocation, String) -> () { get set }
     var cancellable: Set<AnyCancellable> { get set }
     
@@ -18,7 +18,7 @@ protocol LocationViewModelProtocol {
 }
 
 class LocationViewModel: NSObject {
-    var publisher: Published<CLLocation?>.Publisher { $location }
+    var locationPublisher: Published<CLLocation?>.Publisher { $location }
     var locationCallBack: (CLLocation, String) -> ()
     var cancellable: Set<AnyCancellable>
     private var locationManager: LocationManagerProtocol

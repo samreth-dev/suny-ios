@@ -63,7 +63,7 @@ private extension LocationViewController {
     }
     
     func binding() {
-        viewModel.publisher.receive(on: DispatchQueue.main).sink { [weak self] location in
+        viewModel.locationPublisher.receive(on: DispatchQueue.main).sink { [weak self] location in
             if let self { self.dismiss(animated: true) }
         }.store(in: &viewModel.cancellable)
     }
