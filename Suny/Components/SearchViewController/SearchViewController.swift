@@ -10,11 +10,11 @@ import UIKit
 class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    private var viewModel: SearchViewModelProtocol
+    private var viewModel: SearchViewModelProtocol!
     
     init(viewModel: SearchViewModelProtocol) {
-        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel = viewModel
     }
     
     required init?(coder: NSCoder) {
