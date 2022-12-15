@@ -9,9 +9,6 @@ import WeatherKit
 import Foundation
 
 protocol AnyWeather {
-    associatedtype T
-    var weather: T { get set }
-    
     func getIcon() -> String
     func getTime() -> String
     func getTemp() -> String
@@ -66,15 +63,6 @@ extension CurrentWeather {
 }
 
 extension Weather: AnyWeather {
-    var weather: Weather {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-    
     func getIcon() -> String {
         self.currentWeather.symbolName
     }
@@ -89,15 +77,6 @@ extension Weather: AnyWeather {
 }
 
 extension DayWeather: AnyWeather {
-    var weather: DayWeather {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-    
     func getIcon() -> String {
         self.symbolName
     }
@@ -112,15 +91,6 @@ extension DayWeather: AnyWeather {
 }
 
 extension HourWeather: AnyWeather {
-    var weather: HourWeather {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-    
     func getIcon() -> String {
         self.symbolName
     }
@@ -137,15 +107,6 @@ extension HourWeather: AnyWeather {
 }
 
 extension MinuteWeather: AnyWeather {
-    var weather: MinuteWeather {
-        get {
-            return self
-        }
-        set {
-            self = newValue
-        }
-    }
-    
     func getIcon() -> String {
         "sun.min"
     }
